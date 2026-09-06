@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>SimPhilly 2000 — Climate Equity City Builder</title>
+<meta name="description" content="A climate equity city builder for Philadelphia. Every department is a real civic tech tool.">
+<meta property="og:title" content="SimPhilly 2000 — Climate Equity City Builder">
+<meta property="og:description" content="Can you govern Philadelphia through the climate crisis? Every department is a real civic tech tool built for Philly.">
+<meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23D4A017'/><text x='16' y='22' text-anchor='middle' font-size='14' font-weight='900' fill='%231a1a2e' font-family='system-ui'>SP</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{background:#10172a;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;-webkit-tap-highlight-color:transparent}a{-webkit-tap-highlight-color:transparent}
+*:focus-visible{outline:2px solid #D4A017;outline-offset:2px;border-radius:4px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes gradeReveal{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,160,23,0.4)}50%{box-shadow:0 0 0 6px rgba(212,160,23,0)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes newsflash{0%{transform:scale(0.7) rotate(-1deg);opacity:0;filter:brightness(2)}50%{transform:scale(1.03);filter:brightness(1.3)}100%{transform:scale(1) rotate(0);opacity:1;filter:brightness(1)}}
+@keyframes skylineRise{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes stampIn{0%{transform:scale(2) rotate(-8deg);opacity:0}60%{transform:scale(0.95) rotate(1deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes confettiFall{0%{transform:translateY(-100vh) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+@keyframes achievePop{0%{transform:scale(0) rotate(-10deg)}60%{transform:scale(1.2) rotate(3deg)}100%{transform:scale(1) rotate(0)}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
+#splash{position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%,#1f2d50,#10172a 70%);transition:opacity 0.4s}
+#splash.hidden{opacity:0;pointer-events:none}
+#splash .logo-sim{background:linear-gradient(135deg,#D4A017,#f4d03f);padding:2px 12px;font-size:20px;font-weight:900;color:#1a1a2e;letter-spacing:1px;border-radius:2px}
+#splash .logo-philly{font-size:32px;font-weight:900;color:#fff;letter-spacing:3px;margin-left:6px}
+#splash .loading{margin-top:24px;font-size:12px;color:#667;letter-spacing:2px;background:linear-gradient(90deg,#667,#D4A017 50%,#667);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 2s linear infinite}
+.phase{animation:fadeIn 0.35s ease-out both}.newsflash{animation:newsflash 0.5s cubic-bezier(0.34,1.56,0.64,1) both}
+.stamp{animation:stampIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both}.skyline-anim{animation:skylineRise 1s ease-out 0.3s both}
+.grade-circle{animation:gradeReveal 0.6s cubic-bezier(0.34,1.56,0.64,1) both}
+.shake-it{animation:shake 0.4s ease-in-out}
+.confetti-piece{position:fixed;width:8px;height:8px;top:-10px;z-index:100;animation:confettiFall 3s ease-in forwards;pointer-events:none}
+.achieve-badge{animation:achievePop 0.4s cubic-bezier(0.34,1.56,0.64,1) both;display:inline-flex;align-items:center;gap:6px;background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.3);border-radius:8px;padding:6px 12px;margin:4px;font-size:12px;font-weight:600}
+.btn{padding:14px 24px;border:none;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.3px;cursor:pointer;transition:all 0.15s;background:#D4A017;color:#1a1a2e}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 4px 12px rgba(212,160,23,0.3)}
+.btn:active{transform:translateY(0) scale(0.97);filter:brightness(0.95);box-shadow:none}
+.btn:disabled{background:#444;color:#888;opacity:0.5;cursor:not-allowed;transform:none;filter:none;box-shadow:none}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.12);color:#8890a4}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.3);color:#d0c8b8}.btn-ghost.active{background:#D4A017;border-color:#D4A017;color:#1a1a2e}
+.alloc-btn{width:44px;height:44px;border-radius:50%;font-size:20px;font-weight:700;cursor:pointer;transition:all 0.12s;display:flex;align-items:center;justify-content:center;line-height:1}
+.alloc-btn:hover:not(:disabled){transform:scale(1.12)}.alloc-btn:active:not(:disabled){transform:scale(0.88)}.alloc-btn:disabled{cursor:not-allowed;opacity:0.2}
+.dept-card{border-radius:10px;padding:12px 16px;margin-bottom:8px;transition:all 0.2s}.dept-card:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+.score-fill{height:100%;border-radius:7px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1)}
+.tool-link{display:flex;align-items:center;gap:10px;border-radius:8px;padding:10px 14px;margin-bottom:5px;text-decoration:none;transition:all 0.15s}.tool-link:hover{transform:translateX(3px)}
+.voice-card{border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:all 0.2s}
+.progress{display:flex;gap:8px;justify-content:center;padding:10px 0 4px}
+.progress-dot{width:10px;height:10px;border-radius:50%;transition:all 0.3s}
+.progress-dot.done{background:#D4A017}.progress-dot.active{background:#D4A017;animation:pulse 1.5s ease infinite}.progress-dot.future{background:rgba(255,255,255,0.12)}
+.chart-legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:6px 0 2px}
+.breaking{display:inline-block;background:#c0392b;color:#fff;font-size:10px;font-weight:800;letter-spacing:2px;padding:3px 10px;border-radius:3px;margin-bottom:8px}
+.kb-hint{font-size:10px;color:rgba(255,255,255,0.2);text-align:center;padding:4px 0}
+.hc .progress-dot.future{background:rgba(0,0,0,0.15)}.hc .breaking{background:#dc2626}
+.opinion-bar{height:8px;border-radius:4px;transition:width 0.6s ease;background:linear-gradient(90deg,#a855f7,#c084fc)}
+.fact-card{text-align:center;padding:12px;font-size:12px;font-style:italic;border-top:1px solid rgba(212,160,23,0.15);border-bottom:1px solid rgba(212,160,23,0.15);margin:12px 0}
+</style>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+</head>
+<body>
+<div id="splash"><span class="logo-sim">SIM</span><span class="logo-philly">PHILLY 2000</span><div class="loading">LOADING</div></div>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useCallback,useMemo,useEffect,useRef}=React;
+
+/* ═══ TRANSLATIONS ═══ */
+const I18N={
+  newGame:{en:"NEW GAME",es:"NUEVO JUEGO"},welcome:{en:"Welcome, Mayor.",es:"Bienvenido/a, Alcalde/sa."},
+  subtitle:{en:"THE CLIMATE EQUITY CITY BUILDER",es:"EL CONSTRUCTOR DE EQUIDAD CLIMÁTICA"},
+  tagline:{en:"Plan. Build. Grow Philadelphia.",es:"Planifica. Construye. Crece Philadelphia."},
+  tagQ:{en:"Can you govern a city through the climate crisis?",es:"¿Puedes gobernar una ciudad durante la crisis climática?"},
+  begin:{en:"BEGIN YEAR",es:"COMENZAR AÑO"},confirm:{en:"Confirm Year",es:"Confirmar Año"},budget:{en:"Budget →",es:"Presupuesto →"},
+  allocMin:{en:"Allocate at least 1 point",es:"Asigna al menos 1 punto"},
+  allocated:{en:"Budget fully allocated",es:"Presupuesto asignado"},remaining:{en:"remaining",es:"restantes"},points:{en:"points",es:"puntos"},point:{en:"point",es:"punto"},
+  civicTrust:{en:"Civic Trust Mechanic",es:"Mecánica de Confianza Cívica"},
+  trustDesc:{en:"Invest 2+ in Policy & Plain Language → all departments get",es:"Invierte 2+ en Política → todos los departamentos reciben"},
+  trustBoost:{en:"+15%",es:"+15%"},trustActive:{en:"Civic Trust Bonus Active — +15%",es:"Bono de Confianza Activo — +15%"},
+  startCond:{en:"Starting Conditions",es:"Condiciones Iniciales"},difficulty:{en:"Difficulty",es:"Dificultad"},
+  easy:{en:"Easy",es:"Fácil"},normal:{en:"Normal",es:"Normal"},hard:{en:"Hard",es:"Difícil"},
+  ptsYear:{en:"pts/year",es:"pts/año"},year:{en:"YEAR",es:"AÑO"},
+  govReport:{en:"GOVERNANCE REPORT",es:"INFORME DE GOBERNANZA"},govStyle:{en:"Your Governance Style",es:"Tu Estilo de Gobernanza"},
+  disAssess:{en:"Disability Equity Assessment",es:"Evaluación de Equidad para Personas con Discapacidad"},
+  scoreEvo:{en:"SCORE EVOLUTION",es:"EVOLUCIÓN DE PUNTAJES"},explore:{en:"EXPLORE THE REAL TOOLS",es:"EXPLORA LAS HERRAMIENTAS REALES"},
+  exploreDesc:{en:"Every department is powered by a real climate-justice civic tech tool built for Philadelphia.",es:"Cada departamento está impulsado por una herramienta cívica real construida para Philadelphia."},
+  share:{en:"Share",es:"Compartir"},copied:{en:"Copied!",es:"¡Copiado!"},printReport:{en:"Print Report",es:"Imprimir Informe"},
+  playAgain:{en:"PLAY AGAIN",es:"JUGAR DE NUEVO"},scanToPlay:{en:"SCAN TO PLAY",es:"ESCANEA PARA JUGAR"},
+  leaderboard:{en:"LEADERBOARD",es:"TABLA DE LÍDERES"},dataSources:{en:"DATA SOURCES",es:"FUENTES DE DATOS"},
+  communityVoices:{en:"COMMUNITY VOICES",es:"VOCES COMUNITARIAS"},scoreUpdate:{en:"SCORE UPDATE",es:"ACTUALIZACIÓN DE PUNTAJES"},
+  govInsight:{en:"GOVERNANCE INSIGHT",es:"PERSPECTIVA DE GOBERNANZA"},
+  seeReport:{en:"See Governance Report →",es:"Ver Informe →"},beginNext:{en:"Begin Year",es:"Comenzar Año"},
+  breaking:{en:"BREAKING",es:"URGENTE"},opportunity:{en:"OPPORTUNITY",es:"OPORTUNIDAD"},
+  paidOff:{en:"Your investments paid off",es:"Tus inversiones dieron resultado"},unprepared:{en:"The city was unprepared",es:"La ciudad no estaba preparada"},
+  opinion:{en:"Public Trust",es:"Confianza Pública"},carryover:{en:"Carryover: last year's crisis left lasting damage",es:"Arrastre: la crisis del año pasado dejó daños duraderos"},
+  moreBudget:{en:"Every budget is a moral document.",es:"Cada presupuesto es un documento moral."},
+  govAccord:{en:"Your choices reveal your values. Govern accordingly.",es:"Tus decisiones revelan tus valores. Gobierna en consecuencia."},
+  builtBy:{en:"Built with real climate-justice tools by Nico Meyering, MPA",es:"Construido con herramientas reales por Nico Meyering, MPA"},
+  rated:{en:"Rated E for Everyone Builds",es:"Clasificado E para Todos Construyen"},
+  achievements:{en:"ACHIEVEMENTS UNLOCKED",es:"LOGROS DESBLOQUEADOS"},
+  epilogue:{en:"10 YEARS LATER",es:"10 AÑOS DESPUÉS"},
+  whatCanIDo:{en:"WHAT CAN I DO?",es:"¿QUÉ PUEDO HACER?"},
+  readings:{en:"SUGGESTED READING",es:"LECTURAS SUGERIDAS"},
+  challengeFriend:{en:"Challenge a Friend",es:"Reta a un Amigo"},
+  downloadImg:{en:"Download Results Image",es:"Descargar Imagen"},
+  embedCode:{en:"Embed This Game",es:"Insertar Este Juego"},
+  autoplay:{en:"Watch Demo",es:"Ver Demo"},surplus:{en:"Budget surplus carried over",es:"Excedente presupuestario trasladado"},
+  introP1:{en:"Philadelphia faces rising heat, aging infrastructure, transit cuts, and deep environmental injustice — and the communities hit hardest have been disinvested the longest.",es:"Filadelfia enfrenta calor creciente, infraestructura envejecida, recortes de tránsito e injusticia ambiental profunda."},
+  introP2:{en:"You have <strong>4 years</strong> to allocate resources across <strong>6 departments</strong>. Each year, the city faces a crisis. Your investments determine who's protected.",es:"Tienes <strong>4 años</strong> para asignar recursos en <strong>6 departamentos</strong>. Cada año, la ciudad enfrenta una crisis."},
+};
+function T(key,lang){return I18N[key]?.[lang]||I18N[key]?.en||key}
+
+/* ═══ SOUND ═══ */
+const SFX={ctx:null,muted:false,init(){if(!this.ctx)try{this.ctx=new(window.AudioContext||window.webkitAudioContext)}catch{}if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume()},
+play(type){if(this.muted||!this.ctx)return;try{const t=this.ctx.currentTime,o=this.ctx.createOscillator(),g=this.ctx.createGain();o.connect(g);g.connect(this.ctx.destination);
+if(type==='click'){o.frequency.value=660;g.gain.setValueAtTime(0.06,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.08);o.start(t);o.stop(t+0.08)}
+else if(type==='crisis'){o.type='sawtooth';o.frequency.setValueAtTime(250,t);o.frequency.exponentialRampToValueAtTime(80,t+0.6);g.gain.setValueAtTime(0.12,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.6);o.start(t);o.stop(t+0.6)}
+else if(type==='success'){o.frequency.value=523;g.gain.setValueAtTime(0.08,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.25);o.start(t);o.stop(t+0.25);const o2=this.ctx.createOscillator(),g2=this.ctx.createGain();o2.connect(g2);g2.connect(this.ctx.destination);o2.frequency.value=784;g2.gain.setValueAtTime(0.08,t+0.15);g2.gain.exponentialRampToValueAtTime(0.001,t+0.45);o2.start(t+0.15);o2.stop(t+0.45)}
+else if(type==='grade'){o.type='triangle';o.frequency.setValueAtTime(440,t);o.frequency.exponentialRampToValueAtTime(880,t+0.3);g.gain.setValueAtTime(0.1,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.5);o.start(t);o.stop(t+0.5)}
+}catch{}}};
+
+/* ═══ LEADERBOARD ═══ */
+function getLB(){try{return JSON.parse(localStorage.getItem('sp2k-lb')||'[]')}catch{return[]}}
+function saveLB(g,avg,sty,dis){const lb=getLB();lb.push({g,avg,sty,dis,d:new Date().toLocaleDateString()});lb.sort((a,b)=>b.avg-a.avg);if(lb.length>5)lb.length=5;try{localStorage.setItem('sp2k-lb',JSON.stringify(lb))}catch{};return lb}
+
+/* ═══ ACHIEVEMENTS ═══ */
+function getAch(){try{return JSON.parse(localStorage.getItem('sp2k-ach')||'[]')}catch{return[]}}
+function saveAch(ids){try{const existing=getAch();const merged=[...new Set([...existing,...ids])];localStorage.setItem('sp2k-ach',JSON.stringify(merged));return merged}catch{return ids}}
+const ACHS=[
+  {id:"champion",n:"Climate Champion",d:"Get an A grade",icon:"🏆",ck:(g,h,s)=>g.g==="A"},
+  {id:"perfect",n:"Perfect Record",d:"Mitigate all 4 crises",icon:"⭐",ck:(g,h)=>h.every(x=>x.mit)},
+  {id:"equityfirst",n:"Equity First",d:"Equity score above 80",icon:"⚖️",ck:(g,h,s)=>s.equity>=80},
+  {id:"ironmayor",n:"Iron Mayor",d:"B+ on Hard mode",icon:"💪",ck:(g,h,s,d)=>d==="hard"&&g.g<="B"},
+  {id:"disforward",n:"Disability Forward",d:"Disability-Forward Governance",icon:"♿",ck:(g,h,s,d,da)=>da.t.includes("Forward")},
+  {id:"renaissance",n:"Renaissance Mayor",d:"All scores above 60",icon:"🎭",ck:(g,h,s)=>s.equity>=60&&s.resilience>=60&&s.carbon>=60&&s.health>=60},
+  {id:"trustbuilder",n:"Trust Builder",d:"Civic Trust every year",icon:"🤝",ck:(g,h)=>h.every(x=>(x.al.policy||0)>=2)},
+  {id:"surplus",n:"Fiscal Hawk",d:"Carry surplus 3 times",icon:"💰",ck:(g,h,s,d,da,sp)=>sp>=3},
+];
+
+/* ═══ PRINT REPORT ═══ */
+function printReport(grade,scores,gSt,disA,avg,lang){
+  const w=window.open('','_blank');if(!w)return;
+  w.document.write('<html><head><title>SimPhilly 2000</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet"><style>body{font-family:Inter,sans-serif;max-width:600px;margin:40px auto;padding:20px;color:#333;line-height:1.7}h1{color:#b8860b;font-size:24px}h2{margin-top:24px;color:#555;font-size:16px;border-bottom:1px solid #eee;padding-bottom:4px}.grade{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#D4A017,#f4d03f);color:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;margin:20px auto}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0}.meta{font-size:12px;color:#999;margin-top:32px;text-align:center}</style></head><body>');
+  w.document.write('<h1>SimPhilly 2000</h1><p style="color:#888;font-size:13px">Climate Equity Governance Report</p><div class="grade">'+grade.g+'</div><h2>'+grade.t+'</h2><p>'+grade.m+'</p><p style="color:#888">Average: '+avg+'/100</p><h2>Style: '+gSt.t+'</h2><p>'+gSt.d+'</p><h2>Scores</h2><div class="row"><span>Equity</span><span><strong>'+Math.round(scores.equity)+'</strong></span></div><div class="row"><span>Resilience</span><span><strong>'+Math.round(scores.resilience)+'</strong></span></div><div class="row"><span>Carbon</span><span><strong>'+Math.round(scores.carbon)+'</strong></span></div><div class="row"><span>Health</span><span><strong>'+Math.round(scores.health)+'</strong></span></div><h2>♿ '+disA.t+'</h2><p><em>"'+disA.q+'"</em> — Maya Chen</p><p class="meta">SimPhilly 2000 · meyeringn.github.io/sim-philly-2000 · Nico Meyering, MPA</p></body></html>');
+  w.document.close();w.print();
+}
+
+/* ═══ CANVAS IMAGE ═══ */
+function genImg(grade,scores,gSt,disA,avg){
+  const c=document.createElement('canvas');c.width=600;c.height=360;const x=c.getContext('2d');
+  x.fillStyle='#10172a';x.fillRect(0,0,600,360);
+  x.fillStyle='#D4A017';x.font='900 11px Inter,sans-serif';x.fillText('SIM',30,35);
+  x.font='900 24px Inter,sans-serif';x.fillText('PHILLY 2000',70,35);
+  x.beginPath();x.arc(530,70,35,0,Math.PI*2);const grd=x.createLinearGradient(495,35,565,105);grd.addColorStop(0,'#D4A017');grd.addColorStop(1,'#f4d03f');x.fillStyle=grd;x.fill();
+  x.fillStyle='#1a1a2e';x.font='900 36px Inter,sans-serif';x.textAlign='center';x.fillText(grade.g,530,82);x.textAlign='left';
+  x.fillStyle='#e0d8c8';x.font='800 22px Inter,sans-serif';x.fillText(grade.t,30,80);
+  x.fillStyle='#8890a4';x.font='600 13px Inter,sans-serif';x.fillText(grade.m.substring(0,60),30,105);
+  x.font='700 16px Inter,sans-serif';x.fillStyle='#D4A017';x.fillText('Style: '+gSt.t,30,145);
+  const bars=[{l:'Equity',v:scores.equity,c:'#e74c3c'},{l:'Resilience',v:scores.resilience,c:'#3498db'},{l:'Carbon',v:scores.carbon,c:'#27ae60'},{l:'Health',v:scores.health,c:'#f39c12'}];
+  bars.forEach((b,i)=>{const y=175+i*32;x.fillStyle='#8890a4';x.font='600 12px Inter,sans-serif';x.fillText(b.l,30,y);x.fillText(Math.round(b.v),540,y);x.fillStyle='rgba(255,255,255,0.08)';x.fillRect(120,y-10,400,14);x.fillStyle=b.c;x.fillRect(120,y-10,b.v*4,14)});
+  x.fillStyle='#818cf8';x.font='700 13px Inter,sans-serif';x.fillText('♿ '+disA.t,30,310);
+  x.fillStyle='#3a4260';x.font='400 10px Inter,sans-serif';x.fillText('meyeringn.github.io/sim-philly-2000 · Built by Nico Meyering, MPA',30,345);
+  c.toBlob(b=>{if(!b)return;const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='simphilly-results.png';document.body.appendChild(a);a.click();document.body.removeChild(a)});
+}
+
+/* ═══ SEEDED RANDOM ═══ */
+function getSeed(){const p=new URLSearchParams(window.location.search);return p.get('seed')?parseInt(p.get('seed')):null}
+function seededShuffle(arr,seed){const r=[...arr];for(let i=r.length-1;i>0;i--){seed=(seed*16807)%2147483647;const j=seed%(i+1);[r[i],r[j]]=[r[j],r[i]]}return r}
+
+/* ═══ DATA ═══ */
+const DEPTS=[
+  {id:"parks",name:"Parks & Canopy",nameEs:"Parques y Dosel",icon:"🌳",bg:"#2d8a4e",dw:1,tool:"CanopyWatch",url:"https://meyeringn.github.io/canopy-watch/index",desc:"Plant trees. Cool neighborhoods. Fight heat islands.",descEs:"Planta árboles. Enfría barrios. Combate islas de calor."},
+  {id:"transit",name:"Transit",nameEs:"Tránsito",icon:"🚇",bg:"#3a7bc8",dw:2,tool:"Transit Carbon Calculator",url:"https://meyeringn.github.io/transit-carbon-calculator",desc:"Improve SEPTA. Cut emissions. Connect communities.",descEs:"Mejora SEPTA. Reduce emisiones. Conecta comunidades."},
+  {id:"flood",name:"Flood Resilience",nameEs:"Resiliencia ante Inundaciones",icon:"🌊",bg:"#1a7a8a",dw:0,tool:"FloodRisk Philly",url:"https://meyeringn.github.io/floodrisk-philly/",desc:"Protect homes. Upgrade stormwater systems.",descEs:"Protege hogares. Mejora sistemas pluviales."},
+  {id:"refuge",name:"Climate Refuge",nameEs:"Refugio Climático",icon:"🏠",bg:"#d4760a",dw:3,tool:"ClimateRefuge Philly",url:"https://meyeringn.github.io/climate-refuge-philly/",desc:"Build cooling centers. Open shelters. Save lives.",descEs:"Construye centros de enfriamiento. Salva vidas."},
+  {id:"people",name:"Community Power",nameEs:"Poder Comunitario",icon:"👥",bg:"#c0392b",dw:0,tool:"Frontline Philly",url:"https://meyeringn.github.io/frontline-philly",desc:"Center frontline communities. Build green careers.",descEs:"Centra comunidades vulnerables. Crea empleos verdes."},
+  {id:"policy",name:"Policy & Plain Language",nameEs:"Política y Lenguaje Claro",icon:"📋",bg:"#7b4ea3",dw:1,tool:"PlainSpeak Policy Explainer",url:"https://meyeringn.github.io/plainspeak-policy-explainer/",desc:"Pass legislation people can actually understand.",descEs:"Aprueba leyes que la gente pueda entender."},
+];
+const DM=Object.fromEntries(DEPTS.map(d=>[d.id,d]));
+const IMP={parks:{equity:1.2,resilience:0.5,carbon:1.0,health:2.2},transit:{equity:1.3,resilience:0.4,carbon:2.2,health:0.8},flood:{equity:0.8,resilience:2.8,carbon:0,health:0.8},refuge:{equity:1.5,resilience:1.8,carbon:0.2,health:2.0},people:{equity:2.8,resilience:0.4,carbon:0.4,health:1.2},policy:{equity:0.8,resilience:0.8,carbon:1.2,health:0.8}};
+
+const FACTS=[
+  "In 2023, Philadelphia experienced its hottest summer on record with 30 days above 90°F.",
+  "The average age of Philadelphia's water pipes is over 80 years. Many predate the automobile.",
+  "SEPTA is the 6th-largest transit system in the U.S., serving 900,000+ daily riders.",
+  "Philadelphia has the highest deep poverty rate of any major American city.",
+  "The city has 80,000+ vacant properties — enough to house every unhoused person in Pennsylvania.",
+  "Hunting Park has less than 10% tree canopy. Society Hill has over 40%.",
+  "Philadelphia's combined sewer system means stormwater and sewage share the same pipes — and overflow together.",
+  "The median household income gap between Philadelphia's richest and poorest zip codes is $88,000.",
+  "More than 250,000 Philadelphians — roughly 1 in 6 residents — have a disability.",
+  "Philadelphia's Home Rule Charter, the city's governing document, turned 75 in 2026.",
+  "Between 2012 and 2023, SE Pennsylvania missed out on 188,200 jobs compared to peer regions.",
+  "71% of Gen Z Philadelphians say they want to stay but can't find the careers they need.",
+];
+
+const READINGS=[
+  {t:"Philadelphia 2026: State of the City",s:"Pew Charitable Trusts",u:"https://www.pew.org/en/research-and-analysis/reports/2026/04/philadelphia-2026"},
+  {t:"SE PA Market Assessment for Opportunity Industries",s:"Brookings Institution",u:"https://www.brookings.edu/articles/southeastern-pennsylvania-market-assessment-for-growing-opportunity-industries-and-economic-mobility/"},
+  {t:"Gen Z Likes Philadelphia but Feels Frustrated",s:"Pew Charitable Trusts",u:"https://www.pew.org/en/research-and-analysis/reports/2026/08/gen-z-likes-philadelphia-but-feels-frustrated-by-low-pay-limited-jobs"},
+  {t:"Philadelphia's Guiding Document at 75",s:"Pew Charitable Trusts",u:"https://www.pew.org/en/research-and-analysis/issue-briefs/2026/03/philadelphias-guiding-document-at-75"},
+];
+
+const CIVIC=[
+  {t:"Register to vote",d:"Philadelphians can register at vote.phila.gov",u:"https://vote.phila.gov"},
+  {t:"Attend City Council",d:"Public meetings are open to all residents",u:"https://phlcouncil.com"},
+  {t:"Join Transit Forward Philadelphia",d:"Advocate for better transit",u:"https://transitforwardphilly.org"},
+  {t:"Contact your Council Member",d:"Your voice matters in local government",u:"https://phlcouncil.com/council-members/"},
+  {t:"Join Disability Pride PA",d:"Disability rights and community",u:"https://www.disabilitypridephiladelphia.com"},
+  {t:"Volunteer with your RCO",d:"Registered Community Organizations shape land use",u:"https://www.phila.gov/departments/department-of-planning-and-development/"},
+];
+
+const RES={maya:{name:"Maya Chen",age:34,loc:"West Philadelphia",role:"Wheelchair user",icon:"♿"},james:{name:"James Washington",age:72,loc:"Hunting Park",role:"Retired teacher",icon:"🏠"},sofia:{name:"Sofia Ramirez",age:28,loc:"Eastwick",role:"Hospital worker",icon:"👩‍👧"},darnell:{name:"Darnell Thompson",age:41,loc:"Kensington",role:"Grocery owner",icon:"🏪"},amara:{name:"Amara Okafor",age:55,loc:"North Philadelphia",role:"Health worker",icon:"🩺"},zara:{name:"Zara Williams",age:17,loc:"North Philadelphia",role:"High school junior",icon:"📚"},carlos:{name:"Councilmember Rivera",age:48,loc:"City Hall",role:"District representative",icon:"🏛️"}};
+
+const EV=[
+  {id:"heat",title:"Record Heat Wave Hits Philadelphia",titleEs:"Ola de Calor Récord Golpea Filadelfia",icon:"🔥",by:"parks",hood:"Hunting Park & Kensington",desc:"Temperatures top 108°F for five days. Hunting Park — median income $36,226, tree canopy under 10% — sees hospitalizations spike. The corner of 9th & Hunting Park Ave becomes a makeshift cooling station.",dmg:{health:-11,equity:-6},ym:"Your tree canopy investments kept Hunting Park 12° cooler.",nm:"Without shade, North Philly rowhomes became ovens. Disabled residents and seniors suffered most.",tn:"CanopyWatch maps which blocks need trees most.",gi:"Philadelphia's tree canopy is smallest where heat hits hardest. — Pew, 2026",chain:"water"},
+  {id:"flood",title:"Schuylkill Flooding Threatens Eastwick",titleEs:"Inundación del Schuylkill Amenaza Eastwick",icon:"🌊",by:"flood",hood:"Eastwick & Gray's Ferry",desc:"A stalled nor'easter dumps 7 inches of rain. Eastwick — median income $55,213 — floods again. The Cobbs Creek corridor overflows into basements along 84th Street.",dmg:{resilience:-13,equity:-5},ym:"Green infrastructure held — rain gardens kept Eastwick dry.",nm:"Aging pipes couldn't handle it. Families lost everything. Again.",tn:"FloodRisk Philly shows which renters face the highest risk.",gi:"38% of SE PA's population struggles to cover basic costs. — Brookings, 2025",chain:"displace"},
+  {id:"septa",title:"SEPTA Proposes Major Service Cuts",titleEs:"SEPTA Propone Recortes Importantes",icon:"🚌",by:"transit",hood:"Nicetown & Germantown",desc:"Facing a $240M deficit, SEPTA proposes eliminating Route 47 along 8th Street and cutting Broad Street Line frequency. Essential workers along Germantown Avenue lose their commute.",dmg:{carbon:-9,equity:-8},ym:"Your ridership data proved demand. Council blocked the cuts.",nm:"Without data to fight back, the cuts went through. 30,000 riders lost service.",tn:"Transit Carbon Calculator quantifies carbon savings per route.",gi:"SE PA missed 188,200 jobs partly due to jurisdictional fragmentation. — Brookings, 2025",chain:null},
+  {id:"air",title:"Code Red Air Quality in North Philly",titleEs:"Alerta Roja de Calidad del Aire",icon:"😷",by:"refuge",hood:"Hunting Park & Fairhill",desc:"Wildfire smoke settles over the Delaware Valley. Air quality hits 'hazardous' for three days. Asthma ER visits triple at Temple Hospital on Broad Street. The intersection of 5th & Lehigh becomes unbreathable.",dmg:{health:-10,equity:-7},ym:"Every zip code had a clean-air shelter. Nobody left behind.",nm:"North Philly had nowhere to go. Those without AC kept windows open.",tn:"ClimateRefuge Philly maps every shelter.",gi:"Only half of SE PA jobs are 'opportunity jobs.' — Brookings, 2025",chain:null},
+  {id:"grant",title:"Federal Climate Resilience Grant Available",titleEs:"Subvención Federal de Resiliencia Climática",icon:"💰",by:"policy",hood:"City Hall",desc:"The EPA announces $80M in Justice40 grants for cities with strong, publicly accessible climate equity plans. City Council debates the application at Broad & Market.",bon:{equity:7,resilience:5,carbon:4,health:4},ym:"Your plain-language plan won. Full award!",nm:"Philly's plan was 200 pages of jargon. EPA gave us a fraction.",tn:"PlainSpeak translates policy into plain language.",gi:"Philadelphia ranks last among 50 metros for economic mobility. — Opportunity Insights",chain:null},
+  {id:"jobs",title:"Clean Energy Employer Eyes Philadelphia",titleEs:"Empleador de Energía Limpia Considera Filadelfia",icon:"⚡",by:"people",hood:"Navy Yard & Southwest",desc:"A major solar manufacturer is choosing between Philadelphia, Baltimore, and Newark for a 2,000-job facility near the Navy Yard on South Broad Street.",bon:{equity:7,carbon:5,health:3},ym:"Your workforce pipeline sealed the deal. Philly wins!",nm:"Without trained workers, the company chose Baltimore.",tn:"Frontline Philly maps environmental burden.",gi:"Gen Z Philadelphians feel locked out of careers beyond eds & meds. — Pew, 2026",chain:null},
+  {id:"summit",title:"Philly Hosts Climate Equity Summit",titleEs:"Filadelfia Recibe Cumbre de Equidad Climática",icon:"🏛️",by:"policy",hood:"Convention Center",desc:"Philadelphia hosts the inaugural National Climate Equity Summit at the Convention Center on Arch Street — 5,000 attendees, national press, delegations from 40 cities.",bon:{equity:4,resilience:3,carbon:4,health:3},ym:"Your transparent policy work made Philly the obvious choice.",nm:"Philly hosted but couldn't articulate its own plan.",tn:"PlainSpeak makes policy accessible.",gi:"Philadelphia's Home Rule Charter turns 75. — Pew, 2026",chain:null},
+  {id:"cold",title:"Dangerous Cold Snap Grips the City",titleEs:"Ola de Frío Peligrosa Azota la Ciudad",icon:"🥶",by:"refuge",hood:"Germantown & West Philly",desc:"A polar vortex plunges Philadelphia below 0°F. Pipes burst across aging rowhomes along Germantown Avenue. Unhoused residents at the Broad Street encampment are in danger.",dmg:{health:-10,resilience:-6},ym:"Your refuge network activated — shelters opened within hours.",nm:"Not enough shelters. People died in a city with 80,000 vacant properties.",tn:"ClimateRefuge Philly finds the nearest warming center.",gi:"300,000+ Philadelphians live in poverty. — Pew, 2026",chain:null},
+  {id:"displace",title:"Development Boom Displaces Residents",titleEs:"Boom Inmobiliario Desplaza Residentes",icon:"🏗️",by:"people",hood:"Point Breeze & Fishtown",desc:"Rapid development along Passyunk Avenue and Frankford Avenue pushes rents up 40%. Longtime residents — many on fixed incomes — face displacement from neighborhoods their families built.",dmg:{equity:-9,health:-4},ym:"Community power investments funded legal aid. Families stayed.",nm:"Without protections, 2,000 families were displaced.",tn:"Frontline Philly maps displacement risk.",gi:"Philly's median income: $60,521 — but $33K in North Philly vs $121K in Center City. — Pew, 2026",chain:null},
+  {id:"water",title:"Lead Pipe Crisis in West Philadelphia",titleEs:"Crisis de Tuberías de Plomo en West Philadelphia",icon:"🚰",by:"flood",hood:"West Philadelphia & Mantua",desc:"Testing reveals elevated lead levels across 15 zip codes west of the Schuylkill. 200,000 residents affected. Children at schools along Baltimore Avenue are most vulnerable.",dmg:{health:-12,equity:-5},ym:"Monitoring caught it early. Filters went out in 48 hours.",nm:"Kids drank contaminated water for months before testing.",tn:"FloodRisk Philly maps infrastructure vulnerability.",gi:"The average age of Philadelphia's water pipes is over 80 years. — Pew, 2026",chain:null},
+  {id:"urbag",title:"Philly Wins Urban Agriculture Award",titleEs:"Filadelfia Gana Premio de Agricultura Urbana",icon:"🌱",by:"parks",hood:"Strawberry Mansion & Kensington",desc:"The city's 400+ community gardens — including the Glenwood Green Acres in Strawberry Mansion and the César Andreu Iglesias garden in Kensington — win national recognition and $5M in federal funding.",bon:{equity:5,health:5,carbon:3},ym:"The garden network is thriving. Fresh produce in food deserts.",nm:"The award was nice but gardens in the hardest-hit neighborhoods still lack water.",tn:"CanopyWatch maps green space equity.",gi:"Neighborhoods with least canopy also have fewest healthy food options. — Pew, 2026",chain:null},
+  {id:"transitfund",title:"Federal Bill Funds SEPTA Modernization",titleEs:"Ley Federal Financia Modernización de SEPTA",icon:"🚄",by:"transit",hood:"Broad Street Line & Route 47",desc:"Federal legislation earmarks $800M for SEPTA — enough to replace railcars on the Broad Street Line, install level boarding at City Hall station, and restore Route 47 along 8th Street.",bon:{equity:6,carbon:6,health:3},ym:"New railcars with level boarding. Restored routes. Real modernization.",nm:"Money went to cosmetic upgrades on Center City lines. Outer neighborhoods got nothing.",tn:"Transit Carbon Calculator shows which investments cut the most emissions.",gi:"SEPTA serves 900,000+ daily riders. Transit investment is economic mobility. — Brookings",chain:null},
+  {id:"tidal",title:"Tidal Surge Threatens Navy Yard",titleEs:"Marejada Amenaza el Navy Yard",icon:"🌊",by:"flood",hood:"Navy Yard & South Philadelphia",desc:"King tides and a coastal storm push the Delaware to record levels. The Navy Yard off South Broad and the Eastpoint industrial park face catastrophic flooding.",dmg:{resilience:-11,carbon:-4},ym:"The new seawall and green buffers held. Navy Yard jobs protected.",nm:"The Navy Yard flooded. Three companies relocated. 5,000 jobs gone.",tn:"FloodRisk Philly maps coastal and riverine risk.",gi:"Sea level rise is accelerating in the Delaware Valley. — Pew, 2026",chain:null},
+  {id:"landtrust",title:"Philadelphia Selected for Land Trust Pilot",titleEs:"Filadelfia Seleccionada para Programa Piloto",icon:"🏡",by:"people",hood:"Mantua & Strawberry Mansion",desc:"A $20M community land trust initiative targets Mantua — between 34th and 40th Streets — and Strawberry Mansion. Permanently affordable housing controlled by residents, not developers.",bon:{equity:8,health:3,resilience:3},ym:"The land trust targets neighborhoods that need it most. Residents have real power.",nm:"The program went to neighborhoods that already have resources.",tn:"Frontline Philly maps where investment is most overdue.",gi:"Philadelphia has the highest deep poverty rate of any major U.S. city. — Pew, 2026",chain:null},
+];
+
+const VO={heat:[{r:"james",y:"Those new trees on Hunting Park Ave made all the difference.",n:"Three days I couldn't leave my house. Electric bill will take months."},{r:"zara",y:"They set up a study space at the cooling center. I finished my summer reading.",n:"Our school gym was supposed to be a cooling center but it was locked."}],flood:[{r:"sofia",y:"My block on 84th Street stayed dry for the first time. Rain gardens work.",n:"Third time my basement flooded. My daughter's school things were down there."},{r:"amara",y:"The clinic stayed open through the storm.",n:"Mold-related respiratory issues for months. Kids got it worst."}],septa:[{r:"maya",y:"They kept the 34 trolley and elevators working. I can get to work.",n:"They cut my route. Three transfers, ninety minutes — if elevators work."},{r:"darnell",y:"Buses kept running, customers kept coming. Transit is my lifeline.",n:"Foot traffic dropped 40%. I might have to close."}],air:[{r:"amara",y:"Every zip code had a clean-air shelter. Four languages.",n:"My patients couldn't breathe and had nowhere to go."},{r:"zara",y:"They brought air purifiers to school. We didn't miss any days.",n:"We had outdoor gym class during a Code Red day. Nobody checked."}],grant:[{r:"sofia",y:"I actually understood the climate plan. A city document that made sense.",n:"200 pages nobody could read. How are we supposed to have a say?"},{r:"carlos",y:"The federal reviewers praised our transparency. This is how you win grants.",n:"I couldn't defend a plan I couldn't explain to my own constituents."}],jobs:[{r:"sofia",y:"My neighbor got hired. Full benefits. Off food stamps.",n:"They built it somewhere else. We could've used those jobs."},{r:"zara",y:"They started a green tech apprenticeship at my school. I signed up.",n:"My career counselor said there's nothing here for me. Maybe I should leave."}],summit:[{r:"maya",y:"Philly showed that climate policy and disability justice go together.",n:"We hosted a summit but couldn't explain our own plan."},{r:"carlos",y:"Delegations from 40 cities studied our model. Council is proud.",n:"We looked unprepared on a national stage. That'll haunt us."}],cold:[{r:"james",y:"They opened a warming center two blocks away. Checked on me daily.",n:"My pipes froze. I'm 72. Nobody came."},{r:"maya",y:"Warming shelters had accessible cots and charging stations.",n:"Shelters were in church basements with stairs. Locked out of safety."}],displace:[{r:"james",y:"They tried to buy my house for half its worth. The neighborhood fought back.",n:"My neighbor of 30 years got evicted. Where does she go?"},{r:"carlos",y:"Tenant protections I co-sponsored are working. Families are staying.",n:"I couldn't get the votes for rent stabilization. My district is disappearing."}],water:[{r:"amara",y:"We caught it early. Filters went out in 48 hours.",n:"Kids drank contaminated water for months before anyone tested."},{r:"maya",y:"They delivered filters to my door. Accessible crisis response.",n:"Water distribution had no wheelchair access. I asked a stranger."}],urbag:[{r:"darnell",y:"The community garden is now a full urban farm. Fresh produce in a food desert.",n:"Money went downtown. Kensington gardens still struggle for water."},{r:"zara",y:"I'm learning to grow food in our school garden. It's my favorite class.",n:"The garden program got cut. Budget priorities, they said."}],transitfund:[{r:"maya",y:"Level boarding. No more gap. I can board the train independently.",n:"Money went to paint jobs, not accessibility. Gaps are still there."},{r:"darnell",y:"Route 47 is back, every 10 minutes. Store is busier than ever.",n:"Center City lines got modernized. Kensington has 1970s buses."}],tidal:[{r:"sofia",y:"The seawall held. My cousin's Navy Yard job was protected.",n:"Navy Yard flooded. Three companies relocated. 5,000 jobs gone."},{r:"carlos",y:"Our flood preparedness plan activated perfectly. 72 hours' notice.",n:"The emergency system failed. Nobody told residents until water was rising."}],landtrust:[{r:"sofia",y:"My building is in the land trust. My rent is locked. My daughter can grow up here.",n:"The land trust went to neighborhoods that already have resources."},{r:"james",y:"Residents decide what gets built. Real power over development.",n:"Another program that sounds good but doesn't reach us."}]};
+
+const SM=[{key:"equity",label:"Equity",labelEs:"Equidad",color:"#e74c3c",icon:"⚖️"},{key:"resilience",label:"Resilience",labelEs:"Resiliencia",color:"#3498db",icon:"🛡️"},{key:"carbon",label:"Carbon Reduction",labelEs:"Reducción de Carbono",color:"#27ae60",icon:"🌱"},{key:"health",label:"Community Health",labelEs:"Salud Comunitaria",color:"#f39c12",icon:"❤️"}];
+const GR=[{min:80,g:"A",t:"Climate Champion",tEs:"Campeón Climático",m:"Philadelphia is a national model. Other cities are calling.",mEs:"Filadelfia es un modelo nacional."},{min:65,g:"B",t:"Sustainability Leader",tEs:"Líder en Sustentabilidad",m:"Strong progress — but frontline communities need more.",mEs:"Buen progreso — pero las comunidades necesitan más."},{min:50,g:"C",t:"Making Progress",tEs:"Progresando",m:"Some wins, but the crisis moves faster than your budget.",mEs:"Algunos logros, pero la crisis avanza más rápido."},{min:35,g:"D",t:"Falling Behind",tEs:"Quedándose Atrás",m:"Philadelphia's most vulnerable are paying the price.",mEs:"Los más vulnerables pagan el precio."},{min:0,g:"F",t:"Climate Crisis",tEs:"Crisis Climática",m:"The city is unprepared. The next storm will be catastrophic.",mEs:"La ciudad no está preparada."}];
+const DA=[{min:20,t:"Disability-Forward Governance",tEs:"Gobernanza Pro-Discapacidad",q:"My city showed that accessible infrastructure isn't a nice-to-have — it's how you keep people alive.",c:"#4ade80"},{min:12,t:"Partially Accessible",tEs:"Parcialmente Accesible",q:"Some investments reached us. But disability inclusion shouldn't be partial — it should be the baseline.",c:"#fbbf24"},{min:0,t:"Disabled Philadelphians Were Left Behind",tEs:"Las Personas con Discapacidad Fueron Olvidadas",q:"Cooling centers without ramps. Shelters with stairs. When you don't plan for Disabled people, you plan against us.",c:"#f87171"}];
+const XT=[{n:"Climate Crossover",u:"https://meyeringn.github.io/climate-crossover",d:"Climate career translator"},{n:"Climate Policy Simulator",u:"https://meyeringn.github.io/climate-policy-simulator",d:"Model policy trade-offs"}];
+const DIFFS=[{id:"easy",label:"Easy",pts:14,dm:0.7,bm:1.2},{id:"normal",label:"Normal",pts:12,dm:1,bm:1},{id:"hard",label:"Hard",pts:10,dm:1.3,bm:0.8}];
+const ROUNDS=4,INIT={equity:32,resilience:28,carbon:22,health:38};
+const EPILOGUES={A:"Ten years later, Philadelphia is unrecognizable — in the best way. The tree canopy doubled in North Philly. SEPTA runs 24/7 on three lines. Eastwick hasn't flooded since the green infrastructure went in. Other cities send delegations. What happened here was governance that put people first — and data that proved it worked.",B:"Ten years later, the progress is real but uneven. Some neighborhoods are transformed — Hunting Park has trees, the Navy Yard is thriving — but others still wait. The foundation is solid. The question is whether the next mayor builds on it or lets it slip.",C:"Ten years later, the wins feel like exceptions. A few good programs, some neighborhoods slightly better off, but the structural problems remain. Philadelphia is still reacting to crises instead of preventing them. The tools exist. The political will doesn't — yet.",D:"Ten years later, the consequences compound. Families displaced by the development boom never came back. The flooding got worse. SEPTA cut more routes. The communities that needed the most got the least. Philadelphia learned the hard way that underinvestment has a price — and the most vulnerable pay it.",F:"Ten years later, Philadelphia is a cautionary tale. The heat waves got worse. The infrastructure collapsed. Young people left. The city that could have led on climate equity became the example of what happens when governance fails the people it's supposed to serve."};
+
+function cl(v){return Math.max(0,Math.min(100,v))}
+function gs(t){const v=Object.values(t);const a=v.reduce((x,y)=>x+y,0)/v.length;if(v.every(x=>x<=a*1.6&&x>=a*0.4))return{t:"Balanced Administrator",tEs:"Administrador Equilibrado",d:"You spread resources evenly — stability over transformation."};const s=Object.entries(t).sort(([,x],[,y])=>y-x)[0][0];const m={people:{t:"Community-First Leader",tEs:"Líder Comunitario",d:"You centered the people most affected. Equity is the strategy."},policy:{t:"Systems Thinker",tEs:"Pensador Sistémico",d:"You invested in rules that shape everything else."},parks:{t:"Green Infrastructure Champion",tEs:"Campeón de Infraestructura Verde",d:"You built living systems that cool, clean, and protect."},refuge:{t:"Protector-in-Chief",tEs:"Protector en Jefe",d:"You kept people safe when the climate hit hardest."},transit:{t:"Mobility Champion",tEs:"Campeón de Movilidad",d:"You understood transit connects jobs, health, and justice."},flood:{t:"Resilience Builder",tEs:"Constructor de Resiliencia",d:"You built infrastructure that will outlast your term."}};return m[s]||{t:"Pragmatic Leader",tEs:"Líder Pragmático",d:"Tough calls with limited resources. That's governance."}}
+
+/* ═══ COMPONENTS ═══ */
+function Skyline({hc}){const c=hc?"rgba(0,0,0,0.07)":"rgba(255,255,255,0.05)";return(<svg className="skyline-anim" viewBox="0 0 400 70" style={{width:"100%",maxWidth:340,margin:"0 auto 16px",display:"block"}} aria-hidden="true"><rect x="20" y="40" width="18" height="30" rx="1" fill={c}/><rect x="42" y="30" width="14" height="40" rx="1" fill={c}/><rect x="60" y="45" width="22" height="25" rx="1" fill={c}/><rect x="86" y="22" width="16" height="48" rx="1" fill={c}/><rect x="106" y="35" width="20" height="35" rx="1" fill={c}/><rect x="130" y="8" width="18" height="62" rx="1" fill={c}/><rect x="160" y="25" width="30" height="45" rx="1" fill={c}/><rect x="170" y="6" width="10" height="19" rx="1" fill={c}/><circle cx="175" cy="4" r="2.5" fill={c}/><rect x="200" y="10" width="16" height="60" rx="1" fill={c}/><polygon points="200,10 216,10 208,1" fill={c}/><rect x="222" y="30" width="20" height="40" rx="1" fill={c}/><rect x="246" y="40" width="14" height="30" rx="1" fill={c}/><rect x="264" y="25" width="18" height="45" rx="1" fill={c}/><rect x="286" y="45" width="22" height="25" rx="1" fill={c}/><rect x="312" y="18" width="16" height="52" rx="1" fill={c}/><rect x="332" y="35" width="20" height="35" rx="1" fill={c}/><rect x="356" y="50" width="24" height="3" rx="1" fill={c}/><rect x="360" y="40" width="3" height="12" fill={c}/><rect x="374" y="40" width="3" height="12" fill={c}/><rect x="0" y="68" width="400" height="2" rx="1" fill={c}/></svg>)}
+function QR(){const ref=useRef(null);useEffect(()=>{if(!ref.current||ref.current.children.length>0)return;try{const q=qrcode(0,'M');q.addData('https://meyeringn.github.io/sim-philly-2000');q.make();const s=q.getModuleCount();const sz=3;const cv=document.createElement('canvas');cv.width=cv.height=s*sz+16;const cx=cv.getContext('2d');cx.fillStyle='#1a2744';cx.fillRect(0,0,cv.width,cv.height);cx.fillStyle='#D4A017';for(let r=0;r<s;r++)for(let c=0;c<s;c++)if(q.isDark(r,c))cx.fillRect(c*sz+8,r*sz+8,sz,sz);cv.style.borderRadius='8px';ref.current.appendChild(cv)}catch{}},[]);return <div ref={ref} style={{display:"flex",justifyContent:"center",margin:"8px 0"}}/>}
+function Confetti(){const cols=['#D4A017','#e74c3c','#3498db','#27ae60','#f39c12','#7b4ea3','#fff'];return<div aria-hidden="true">{Array.from({length:50},(_,i)=><div key={i} className="confetti-piece" style={{left:Math.random()*100+'vw',background:cols[i%cols.length],animationDelay:Math.random()*2+'s',animationDuration:(2+Math.random()*3)+'s',borderRadius:Math.random()>0.5?'50%':'2px',width:Math.random()*6+4,height:Math.random()*6+4}}/>)}</div>}
+function ScoreChart({data,t,lang}){if(!data||data.length<2)return null;const W=360,H=150,P={t:12,r:16,b:22,l:32},pW=W-P.l-P.r,pH=H-P.t-P.b;return(<div><svg viewBox={"0 0 "+W+" "+H} style={{width:"100%",display:"block"}} role="img" aria-label="Score chart">{[0,25,50,75,100].map(v=>{const y=P.t+pH-(v/100)*pH;return(<g key={v}><line x1={P.l} y1={y} x2={W-P.r} y2={y} stroke={t.cb} strokeWidth={0.5}/><text x={P.l-4} y={y+3} fontSize={8} fill={t.m} textAnchor="end">{v}</text></g>)})}{data.map((d,i)=>{const x=P.l+(i/(data.length-1))*pW;return <text key={i} x={x} y={H-4} fontSize={8} fill={t.m} textAnchor="middle">{d.year}</text>})}{SM.map(({key,color})=>{const pts=data.map((d,i)=>({x:P.l+(i/(data.length-1))*pW,y:P.t+pH-((d[key]||0)/100)*pH}));const path=pts.map((p,i)=>(i===0?"M":"L")+p.x.toFixed(1)+","+p.y.toFixed(1)).join(" ");return(<g key={key}><path d={path} fill="none" stroke={color} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"/>{pts.map((p,i)=><circle key={i} cx={p.x} cy={p.y} r={3} fill={color} stroke={t.bg} strokeWidth={1.5}/>)}</g>)})}</svg><div className="chart-legend">{SM.map(s=><span key={s.key} style={{color:t.m,fontSize:10,fontWeight:600,display:"flex",alignItems:"center",gap:3}}><span style={{width:10,height:3,borderRadius:2,background:s.color,display:"inline-block"}}/>{lang==="es"?s.labelEs:s.label}</span>)}</div></div>)}
+function SB({label,value,color,icon,delta,hc}){return(<div style={{marginBottom:7}}><div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:3,fontWeight:600,color:hc?"#111":"#d0c8b8"}}><span>{icon} {label}</span><span style={{display:"flex",alignItems:"center",gap:4}}>{delta!==undefined&&delta!==0&&<span style={{color:delta>0?"#16a34a":"#dc2626",fontSize:11,fontWeight:700}}>{delta>0?"+":""}{Math.round(delta)}</span>}{Math.round(value)}</span></div><div style={{height:14,borderRadius:7,background:hc?"#ddd":"rgba(255,255,255,0.08)",overflow:"hidden"}}><div className="score-fill" style={{width:cl(value)+"%",background:color}}/></div></div>)}
+function OpinionBar({value,hc,label}){return(<div style={{marginBottom:10}}><div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:3,fontWeight:600,color:hc?"#111":"#d0c8b8"}}><span>🗳️ {label}</span><span>{Math.round(value)}</span></div><div style={{height:8,borderRadius:4,background:hc?"#ddd":"rgba(255,255,255,0.08)",overflow:"hidden"}}><div className="opinion-bar" style={{width:cl(value)+"%"}}/></div></div>)}
+function Btn({children,onClick,style,disabled,cls}){return <button className={"btn "+(cls||"")} onClick={onClick} disabled={disabled} style={style}>{children}</button>}
+function Logo({hc}){return(<div style={{display:"inline-flex",alignItems:"baseline",gap:4}}><span style={{background:"linear-gradient(135deg,#D4A017,#f4d03f)",padding:"1px 8px",fontSize:14,fontWeight:900,color:"#1a1a2e",letterSpacing:1,borderRadius:2}}>SIM</span><span style={{fontSize:18,fontWeight:900,color:hc?"#111":"#fff",letterSpacing:1}}>PHILLY</span><span style={{fontSize:12,fontWeight:700,color:"#D4A017"}}>2000</span></div>)}
+function Prog({round,total}){return(<div className="progress">{Array.from({length:total},(_,i)=><div key={i} className={"progress-dot "+(i<round-1?"done":i===round-1?"active":"future")}/>)}</div>)}
+function VC({rk,text,hc,cont}){const r=RES[rk];return(<div className="voice-card" style={{background:hc?"#f0f0f0":"rgba(255,255,255,0.04)",border:hc?"1px solid #bbb":"1px solid rgba(255,255,255,0.06)"}}><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:5}}><span style={{fontSize:18,lineHeight:1}}>{r.icon}</span><div><span style={{fontSize:12,fontWeight:700,color:hc?"#111":"#d0c8b8"}}>{r.name}</span><span style={{fontSize:11,color:hc?"#555":"#778",marginLeft:6}}>{r.age} · {r.loc}</span></div></div><p style={{fontSize:12.5,color:hc?"#333":"#a8a098",margin:0,lineHeight:1.55,fontStyle:"italic"}}>"{cont?cont+" ":""}{text}"</p></div>)}
+
+/* ═══ MAIN APP ═══ */
+function App(){
+  const [ph,setPh]=useState("title");
+  const [rnd,setRnd]=useState(1);
+  const [sc,setSc]=useState({...INIT});
+  const [prev,setPrev]=useState(null);
+  const [al,setAl]=useState(Object.fromEntries(DEPTS.map(d=>[d.id,0])));
+  const [evts,setEvts]=useState([]);
+  const [ce,setCe]=useState(null);
+  const [er,setEr]=useState(null);
+  const [hist,setHist]=useState([]);
+  const [sh,setSh]=useState([{year:"Start",...INIT}]);
+  const [hc,setHc]=useState(false);
+  const [cp,setCp]=useState(false);
+  const [tb,setTb]=useState(false);
+  const [diff,setDiff]=useState("normal");
+  const [mut,setMut]=useState(false);
+  const [lb,setLb]=useState(getLB());
+  const [saved,setSaved]=useState(false);
+  const [carry,setCarry]=useState(null);
+  const [lang,setLang]=useState("en");
+  const [opinion,setOpinion]=useState(45);
+  const [surplus,setSurplus]=useState(0);
+  const [surplusCount,setSurplusCount]=useState(0);
+  const [shaking,setShaking]=useState(false);
+  const [autoplay,setAutoplay]=useState(false);
+  const [showEmbed,setShowEmbed]=useState(false);
+  const [fact,setFact]=useState("");
+
+  useEffect(()=>{const s=document.getElementById("splash");if(s)setTimeout(()=>s.classList.add("hidden"),300)},[]);
+  useEffect(()=>{window.scrollTo({top:0})},[ph,rnd]);
+  useEffect(()=>{SFX.muted=mut},[mut]);
+  // Check URL seed
+  const urlSeed=useMemo(()=>getSeed(),[]);
+
+  // Autoplay
+  useEffect(()=>{
+    if(!autoplay)return;
+    const timer=setTimeout(()=>{
+      if(ph==="title"){start()}
+      else if(ph==="intro"){setPh("alloc")}
+      else if(ph==="alloc"){
+        const na={};let rem=df.pts+surplus;DEPTS.forEach((d,i)=>{const p=Math.min(Math.ceil(rem/Math.max(1,DEPTS.length-i)),rem);na[d.id]=p;rem-=p});setAl(na);setTimeout(()=>confirm(),800);
+      }
+      else if(ph==="event"){resolve()}
+      else if(ph==="over"){setAutoplay(false)}
+    },ph==="alloc"?1500:2000);
+    return()=>clearTimeout(timer);
+  },[autoplay,ph]);
+
+  const df=DIFFS.find(d=>d.id===diff)||DIFFS[1];
+  const budget=df.pts+surplus;
+  const spent=Object.values(al).reduce((a,b)=>a+b,0);
+  const rem=budget-spent;
+  const t=hc?{bg:"#fff",tx:"#111",m:"#444",f:"#888",cb:"#bbb",cg:"#f0f0f0",acc:"#b8860b",abg:"rgba(184,134,11,0.08)",grad:"#f8f8f8"}:{bg:"#10172a",tx:"#e0d8c8",m:"#8890a4",f:"#3a4260",cb:"rgba(255,255,255,0.06)",cg:"rgba(255,255,255,0.03)",acc:"#D4A017",abg:"rgba(212,160,23,0.07)",grad:"radial-gradient(ellipse at 50% 30%,#1f2d50 0%,#10172a 70%)"};
+
+  const start=useCallback(()=>{SFX.init();SFX.play('click');setRnd(1);setSc({...INIT});setPrev(null);setAl(Object.fromEntries(DEPTS.map(d=>[d.id,0])));
+    const seed=urlSeed||Math.floor(Math.random()*100000);
+    setEvts(seededShuffle(EV,seed).slice(0,ROUNDS));
+    setCe(null);setEr(null);setHist([]);setSh([{year:"Start",...INIT}]);setCp(false);setTb(false);setSaved(false);setCarry(null);setOpinion(45);setSurplus(0);setSurplusCount(0);setFact(FACTS[Math.floor(Math.random()*FACTS.length)]);setPh("intro")},[urlSeed]);
+
+  const adj=useCallback((dept,delta)=>{SFX.play('click');setAl(prev=>{const next=prev[dept]+delta;const others=Object.entries(prev).filter(([k])=>k!==dept).reduce((s,[,v])=>s+v,0);if(next<0||others+next>budget)return prev;return{...prev,[dept]:next}})},[budget]);
+
+  const confirm=useCallback(()=>{
+    SFX.play('click');
+    const hasTrust=al.policy>=2;setTb(hasTrust);
+    const opinionMult=opinion>60?1.1:opinion<30?0.9:1.0;
+    const trustMult=hasTrust?1.15:1.0;
+    const ns={...sc};
+    if(carry)Object.entries(carry).forEach(([k,v])=>{ns[k]=cl(ns[k]+v)});
+    // Check crisis chain: if prev event failed and had a chain, force that event
+    let curEvts=[...evts];
+    if(hist.length>0){const lastH=hist[hist.length-1];if(!lastH.mit){const lastEv=EV.find(e=>e.id===lastH.eid);if(lastEv&&lastEv.chain){const chainEv=EV.find(e=>e.id===lastEv.chain);if(chainEv&&rnd<=ROUNDS){curEvts=[...curEvts];curEvts[rnd-1]=chainEv;setEvts(curEvts)}}}}
+    Object.entries(al).forEach(([dept,pts])=>{const factor=(dept==="policy"?1.0:trustMult)*opinionMult;Object.entries(IMP[dept]).forEach(([sk,m])=>{ns[sk]=cl(ns[sk]+pts*m*factor)})});
+    setPrev({...sc});setSc(ns);
+    const ev=curEvts[rnd-1];setCe(ev);const invested=al[ev.by]||0;const mitigated=invested>=2;
+    const rs={...ns};
+    if(ev.dmg)Object.entries(ev.dmg).forEach(([k,v])=>{rs[k]=cl(rs[k]+v*df.dm*(mitigated?0.35:1))});
+    if(ev.bon)Object.entries(ev.bon).forEach(([k,v])=>{rs[k]=cl(rs[k]+v*df.bm*(mitigated?1:0.25))});
+    setEr({mit:mitigated,msg:mitigated?ev.ym:ev.nm,before:ns,after:rs});
+    setHist(prev=>[...prev,{rnd,al:{...al},eid:ev.id,mit:mitigated}]);
+    // Public opinion
+    setOpinion(o=>cl(mitigated?o+6:o-8));
+    // Carryover
+    if(!mitigated&&ev.dmg){const worst=Object.entries(ev.dmg).sort(([,a],[,b])=>a-b)[0];setCarry({[worst[0]]:-3})}else{setCarry(null)}
+    // Budget surplus carry
+    if(rem>0){setSurplus(Math.floor(rem*0.5));setSurplusCount(c=>c+1)}else{setSurplus(0)}
+    // Screen shake on crisis
+    if(!mitigated&&ev.dmg){setShaking(true);setTimeout(()=>setShaking(false),400)}
+    setTimeout(()=>{mitigated?SFX.play('success'):SFX.play('crisis')},300);
+    setFact(FACTS[Math.floor(Math.random()*FACTS.length)]);
+    setPh("event");
+  },[sc,al,evts,rnd,df,carry,opinion,rem,hist]);
+
+  const resolve=useCallback(()=>{SFX.play('click');setSc(er.after);setSh(prev=>[...prev,{year:(lang==="es"?"Año ":"Year ")+rnd,...Object.fromEntries(Object.keys(er.after).map(k=>[k,Math.round(er.after[k])]))}]);if(rnd>=ROUNDS){SFX.play('grade');setPh("over");return}setRnd(r=>r+1);setAl(Object.fromEntries(DEPTS.map(d=>[d.id,0])));setPrev(null);setPh("alloc")},[er,rnd,lang]);
+
+  // Keyboard shortcuts
+  useEffect(()=>{const h=(e)=>{if(ph!=="alloc")return;const n=parseInt(e.key);if(n>=1&&n<=6){e.preventDefault();const d=DEPTS[n-1];if(e.shiftKey){adj(d.id,-1)}else if(rem>0){adj(d.id,1)}}if((e.key===" "||e.key==="Enter")&&spent>0){e.preventDefault();confirm()}};window.addEventListener("keydown",h);return()=>window.removeEventListener("keydown",h)},[ph,rem,spent,adj,confirm]);
+
+  // Character continuity
+  function getCont(rk){const prevEvts=hist.filter(h=>{const v=VO[h.eid];return v&&v.some(x=>x.r===rk)});if(prevEvts.length===0)return"";const last=prevEvts[prevEvts.length-1];const lastEv=EV.find(e=>e.id===last.eid);if(!lastEv)return"";return last.mit?"After "+lastEv.title.split(" ").slice(0,3).join(" ").toLowerCase()+"… things improved. But now —":"After "+lastEv.title.split(" ").slice(0,3).join(" ").toLowerCase()+"… things were already hard. And now —"}
+
+  const avg=Math.round(Object.values(sc).reduce((a,b)=>a+b,0)/4);
+  const grade=GR.find(g=>avg>=g.min)||GR[GR.length-1];
+  const md=ce?DM[ce.by]:null;
+  const totals=useMemo(()=>{const tot=Object.fromEntries(DEPTS.map(d=>[d.id,0]));hist.forEach(h=>{Object.entries(h.al).forEach(([k,v])=>{tot[k]+=v})});return tot},[hist]);
+  const gSt=useMemo(()=>gs(totals),[totals]);
+  const mitC=hist.filter(h=>h.mit).length;
+  const disSc=useMemo(()=>{let s=0;DEPTS.forEach(d=>{s+=((totals[d.id]||0)*(d.dw||0))});return s},[totals]);
+  const disA=DA.find(d=>disSc>=d.min)||DA[DA.length-1];
+  const epilogue=EPILOGUES[grade.g]||EPILOGUES.F;
+
+  // Achievements
+  const unlockedAchs=useMemo(()=>ACHS.filter(a=>a.ck(grade,hist,sc,diff,disA,surplusCount)).map(a=>a.id),[grade,hist,sc,diff,disA,surplusCount]);
+  useEffect(()=>{if(ph==="over"&&!saved){setLb(saveLB(grade.g,avg,gSt.t,disA.t));if(unlockedAchs.length)saveAch(unlockedAchs);setSaved(true)}},[ph,saved]);
+
+  const share=useCallback(()=>{const txt="🏛️ I just governed Philadelphia in SimPhilly 2000!\n\nGrade: "+grade.g+" — "+(lang==="es"?grade.tEs:grade.t)+"\n⚖️ Equity: "+Math.round(sc.equity)+" | 🛡️ Resilience: "+Math.round(sc.resilience)+" | 🌱 Carbon: "+Math.round(sc.carbon)+" | ❤️ Health: "+Math.round(sc.health)+"\nStyle: "+(lang==="es"?gSt.tEs:gSt.t)+"\n♿ "+(lang==="es"?disA.tEs:disA.t)+"\n\nhttps://meyeringn.github.io/sim-philly-2000\n#SimPhilly2000 #ClimateEquity #Philadelphia";navigator.clipboard.writeText(txt).then(()=>setCp(true)).catch(()=>{})},[grade,sc,gSt,disA,lang]);
+  const tweetUrl=useMemo(()=>"https://twitter.com/intent/tweet?text="+encodeURIComponent("I just governed Philadelphia in SimPhilly 2000! Grade: "+grade.g+" — "+grade.t+". Can you do better? 🏛️\nhttps://meyeringn.github.io/sim-philly-2000\n#SimPhilly2000 #ClimateEquity"),[grade]);
+  const challengeUrl=useMemo(()=>{const seed=Math.floor(Math.random()*99999);return window.location.origin+window.location.pathname+"?seed="+seed},[]);
+  const embedCode='<iframe src="https://meyeringn.github.io/sim-philly-2000" width="480" height="800" style="border:none;border-radius:12px" title="SimPhilly 2000"></iframe>';
+
+  const shell={minHeight:"100vh",background:t.bg,color:t.tx,maxWidth:480,margin:"0 auto"};
+  const bar={background:"linear-gradient(135deg,#D4A017 0%,#b8860b 100%)",padding:"10px 16px",display:"flex",justifyContent:"space-between",alignItems:"center"};
+  const hcB={background:"none",border:"1px solid "+(hc?"#888":"rgba(255,255,255,0.25)"),borderRadius:6,padding:"4px 8px",fontSize:11,fontWeight:700,color:hc?"#444":"#1a1a2e",cursor:"pointer"};
+  const sec={padding:"16px 20px"};
+  const cd=(active,color)=>({background:active?(color+(hc?"22":"10")):t.cg,border:"1px solid "+(active?(color+(hc?"55":"35")):t.cb)});
+  const headerBtns=<div style={{display:"flex",alignItems:"center",gap:3}}>
+    <button onClick={()=>{setLang(lang==="en"?"es":"en")}} style={{...hcB,fontSize:10}} aria-label="Toggle language">{lang==="en"?"ES":"EN"}</button>
+    <button onClick={()=>{setMut(!mut);SFX.play('click')}} style={hcB} aria-label="Toggle sound">{mut?"🔇":"🔊"}</button>
+    <button onClick={()=>setHc(!hc)} style={hcB} aria-label="Toggle contrast">{hc?"◑":"◐"}</button>
+  </div>;
+
+  /* ── TITLE ── */
+  if(ph==="title")return(
+    <div style={shell} className={hc?"hc":""}><div key="title" className="phase" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:"100vh",padding:32,textAlign:"center",background:t.grad,position:"relative"}}>
+      <div style={{position:"absolute",top:16,right:16}}>{headerBtns}</div>
+      <Skyline hc={hc}/>
+      <div style={{display:"inline-flex",alignItems:"baseline",gap:6,marginBottom:6}}>
+        <span style={{background:"linear-gradient(135deg,#D4A017,#f4d03f)",padding:"3px 16px",fontSize:28,fontWeight:900,color:"#1a1a2e",letterSpacing:1,borderRadius:3}}>SIM</span>
+        <span style={{fontSize:44,fontWeight:900,color:hc?"#111":"#fff",letterSpacing:4}}>PHILLY</span>
+        <span style={{fontSize:24,fontWeight:700,color:"#D4A017"}}>2000</span>
+      </div>
+      <p style={{fontSize:11,letterSpacing:5,marginBottom:36,color:t.acc,fontWeight:600}}>{T("subtitle",lang)}</p>
+      <div style={{display:"flex",gap:16,marginBottom:32,fontSize:28}}>{DEPTS.map(d=><span key={d.id} style={{opacity:0.7}}>{d.icon}</span>)}</div>
+      <p style={{fontSize:14,maxWidth:300,lineHeight:1.7,marginBottom:28,color:t.m}}>{T("tagline",lang)}<br/>{T("tagQ",lang)}</p>
+      <div style={{display:"flex",gap:10,marginBottom:16}}>
+        <Btn onClick={start} style={{fontSize:17,padding:"16px 40px",borderRadius:12}}>{T("newGame",lang)}</Btn>
+        <Btn onClick={()=>{setAutoplay(true);start()}} cls="btn-ghost" style={{fontSize:13,padding:"16px 20px",borderRadius:12,border:"1px solid "+t.acc,color:t.acc}}>{T("autoplay",lang)}</Btn>
+      </div>
+      {lb.length>0&&<div style={{marginTop:16,width:"100%",maxWidth:280}}>
+        <p style={{fontSize:10,fontWeight:700,color:t.f,letterSpacing:1,marginBottom:6}}>{T("leaderboard",lang)}</p>
+        {lb.slice(0,3).map((s,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",fontSize:11,color:t.m,padding:"3px 0",borderBottom:"1px solid "+t.cb}}><span>{i+1}. {s.sty}</span><span style={{fontWeight:700,color:t.acc}}>{s.g} ({s.avg})</span></div>)}
+      </div>}
+      <p style={{fontSize:10,marginTop:20,color:t.f,lineHeight:1.7}}>{T("builtBy",lang)}<br/>{T("rated",lang)}</p>
+    </div></div>
+  );
+
+  /* ── INTRO ── */
+  if(ph==="intro")return(
+    <div style={shell} className={hc?"hc":""}><div style={bar}><Logo hc={hc}/>{headerBtns}</div>
+    <div key="intro" className="phase" style={sec}>
+      <h2 style={{fontSize:22,fontWeight:800,margin:"0 0 16px",color:t.acc}}>{T("welcome",lang)}</h2>
+      <p style={{fontSize:14,lineHeight:1.75,marginBottom:16,color:t.m}} dangerouslySetInnerHTML={{__html:T("introP1",lang)}}/>
+      <p style={{fontSize:14,lineHeight:1.75,marginBottom:18,color:t.m}} dangerouslySetInnerHTML={{__html:T("introP2",lang)}}/>
+      <div style={{background:t.abg,border:"1px solid "+(hc?"#ddb":"rgba(212,160,23,0.18)"),borderRadius:10,padding:16,marginBottom:14}}>
+        <p style={{fontSize:14,fontWeight:700,color:t.acc,margin:"0 0 4px",fontStyle:"italic"}}>{T("moreBudget",lang)}</p>
+        <p style={{fontSize:12,color:t.m,margin:0}}>{T("govAccord",lang)}</p>
+      </div>
+      <p style={{fontSize:12,fontWeight:700,color:t.m,margin:"0 0 8px"}}>{T("difficulty",lang)}</p>
+      <div style={{display:"flex",gap:8,marginBottom:14}}>{DIFFS.map(d=>(
+        <button key={d.id} className={"btn "+(diff===d.id?"":"btn-ghost")+(diff===d.id?" active":"")} onClick={()=>{setDiff(d.id);SFX.play('click')}} style={{flex:1,padding:"10px 8px",fontSize:13}}>
+          <div style={{fontWeight:700}}>{T(d.id,lang)}</div><div style={{fontSize:10,opacity:0.7,marginTop:2}}>{d.pts} {T("ptsYear",lang)}</div>
+        </button>
+      ))}</div>
+      <div style={{background:hc?"rgba(123,78,163,0.06)":"rgba(123,78,163,0.1)",border:"1px solid "+(hc?"#b8b":"rgba(123,78,163,0.2)"),borderRadius:10,padding:16,marginBottom:14}}>
+        <p style={{fontSize:12,fontWeight:700,color:"#9b6ec4",margin:"0 0 4px"}}>📋 {T("civicTrust",lang)}</p>
+        <p style={{fontSize:12,color:t.m,margin:0,lineHeight:1.5}}>{T("trustDesc",lang)} <strong style={{color:t.tx}}>{T("trustBoost",lang)}</strong></p>
+      </div>
+      <div style={{background:t.abg,border:"1px solid "+(hc?"#ddb":"rgba(212,160,23,0.18)"),borderRadius:10,padding:16,marginBottom:24}}>
+        <p style={{fontSize:12,color:t.acc,margin:0,fontWeight:700}}>{T("startCond",lang)}</p>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 16px",marginTop:10}}>{SM.map(s=><span key={s.key} style={{fontSize:12,color:t.m}}>{s.icon} {lang==="es"?s.labelEs:s.label}: <strong style={{color:t.tx}}>{INIT[s.key]}</strong></span>)}</div>
+      </div>
+      <Btn onClick={()=>{SFX.play('click');setPh("alloc")}} style={{width:"100%"}}>{T("begin",lang)} 1 →</Btn>
+    </div></div>
+  );
+
+  /* ── ALLOCATE ── */
+  if(ph==="alloc")return(
+    <div style={shell} className={hc?"hc":""}><div style={bar}><Logo hc={hc}/><div style={{display:"flex",alignItems:"center",gap:6}}>{headerBtns}<span style={{fontWeight:700,fontSize:12,color:"#1a1a2e",opacity:0.7,marginLeft:4}}>{T("year",lang)} {rnd}</span></div></div>
+    <Prog round={rnd} total={ROUNDS}/>
+    <div key={"a"+rnd} className="phase" style={sec} role="region" aria-live="polite">
+      {carry&&<div style={{background:"rgba(248,113,113,0.08)",border:"1px solid rgba(248,113,113,0.2)",borderRadius:8,padding:"8px 14px",marginBottom:10,textAlign:"center"}}><span style={{fontSize:12,fontWeight:700,color:"#f87171"}}>⚠ {T("carryover",lang)} ({Object.entries(carry).map(([k,v])=>SM.find(s=>s.key===k).icon+" "+v).join(", ")})</span></div>}
+      {surplus>0&&<div style={{background:"rgba(39,174,96,0.08)",border:"1px solid rgba(39,174,96,0.2)",borderRadius:8,padding:"8px 14px",marginBottom:10,textAlign:"center"}}><span style={{fontSize:12,fontWeight:700,color:"#16a34a"}}>💰 {T("surplus",lang)}: +{surplus} {surplus===1?T("point",lang):T("points",lang)}</span></div>}
+      <div style={{marginBottom:8}}>{SM.map(s=><SB key={s.key} label={lang==="es"?s.labelEs:s.label} value={sc[s.key]} color={s.color} icon={s.icon} hc={hc}/>)}</div>
+      <OpinionBar value={opinion} hc={hc} label={T("opinion",lang)}/>
+      <div className="fact-card" style={{color:t.m}}>📊 {fact}</div>
+      {al.policy>=2&&<div style={{background:hc?"rgba(123,78,163,0.08)":"rgba(123,78,163,0.12)",border:"1px solid "+(hc?"#b8b":"rgba(123,78,163,0.25)"),borderRadius:8,padding:"8px 14px",marginBottom:10,textAlign:"center"}}><span style={{fontSize:12,fontWeight:700,color:"#9b6ec4"}}>📋 {T("trustActive",lang)}</span></div>}
+      <div style={{background:rem===0?"rgba(39,174,96,0.1)":t.abg,border:"1px solid "+(rem===0?(hc?"#2a9d4a":"rgba(39,174,96,0.3)"):(hc?"#ddb":"rgba(212,160,23,0.3)")),borderRadius:8,padding:"9px 14px",marginBottom:14,textAlign:"center"}}><span style={{fontSize:13,fontWeight:700,color:rem===0?"#16a34a":t.acc}}>{rem===0?"✓ "+T("allocated",lang):rem+" "+(rem!==1?T("points",lang):T("point",lang))+" "+T("remaining",lang)}</span></div>
+      {DEPTS.map((d,i)=>(
+        <div key={d.id} className="dept-card" style={cd(al[d.id]>0,d.bg)}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:3}}><span style={{fontSize:16}}>{d.icon}</span><span style={{fontSize:14,fontWeight:700,color:t.tx}}>{lang==="es"?d.nameEs:d.name}</span><span style={{fontSize:10,color:t.f,marginLeft:4,opacity:0.5}}>{i+1}</span></div>
+              <p style={{fontSize:11,color:t.m,margin:0,lineHeight:1.4}}>{lang==="es"?d.descEs:d.desc}</p>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:10,marginLeft:14}}>
+              <button className="alloc-btn" onClick={()=>adj(d.id,-1)} disabled={al[d.id]<=0} aria-label={"- "+d.name} style={{border:"2px solid "+d.bg,background:"transparent",color:d.bg}}>−</button>
+              <span style={{fontSize:26,fontWeight:900,minWidth:30,textAlign:"center",color:al[d.id]>0?d.bg:t.f,transition:"color 0.2s"}}>{al[d.id]}</span>
+              <button className="alloc-btn" onClick={()=>adj(d.id,1)} disabled={rem<=0} aria-label={"+ "+d.name} style={{border:"2px solid "+d.bg,background:rem<=0?"transparent":d.bg,color:rem<=0?d.bg:"#fff"}}>+</button>
+            </div>
+          </div>
+        </div>
+      ))}
+      <Btn onClick={confirm} disabled={spent===0} style={{width:"100%",marginTop:8}}>{spent===0?T("allocMin",lang):T("confirm",lang)+" "+rnd+" "+T("budget",lang)}</Btn>
+      <p className="kb-hint">1-6 allocate · Shift+key remove · Enter confirm</p>
+    </div></div>
+  );
+
+  /* ── EVENT ── */
+  if(ph==="event"&&ce&&er){
+    const isGood=!!ce.bon;const voices=VO[ce.id]||[];
+    return(<div style={shell} className={(hc?"hc ":"")+(shaking?"shake-it":"")}><div style={bar}><Logo hc={hc}/><div style={{display:"flex",alignItems:"center",gap:6}}>{headerBtns}<span style={{fontWeight:700,fontSize:12,color:"#1a1a2e",opacity:0.7,marginLeft:4}}>{T("year",lang)} {rnd}</span></div></div>
+    <Prog round={rnd} total={ROUNDS}/>
+    <div key={"e"+rnd} className="phase" style={{padding:"20px 20px 24px"}} role="region" aria-live="polite">
+      <div style={{textAlign:"center",marginBottom:8}}><span className="breaking">{isGood?T("opportunity",lang):T("breaking",lang)}</span></div>
+      <div style={{textAlign:"center",marginBottom:14}}><span style={{fontSize:52}}>{ce.icon}</span></div>
+      <h2 className="newsflash" style={{fontSize:19,fontWeight:800,textAlign:"center",margin:"0 0 4px",color:isGood?(hc?"#16a34a":"#4ade80"):(hc?"#dc2626":"#f87171")}}>{lang==="es"?ce.titleEs:ce.title}</h2>
+      {ce.hood&&<p style={{fontSize:11,textAlign:"center",color:t.acc,fontWeight:600,marginBottom:8}}>📍 {ce.hood}</p>}
+      <p style={{fontSize:13,lineHeight:1.65,textAlign:"center",color:t.m,marginBottom:18}}>{ce.desc}</p>
+      <div className="stamp" style={{background:er.mit?(hc?"rgba(22,163,74,0.08)":"rgba(74,222,128,0.07)"):(hc?"rgba(220,38,38,0.08)":"rgba(248,113,113,0.07)"),border:"1px solid "+(er.mit?(hc?"#4a9":"rgba(74,222,128,0.2)"):(hc?"#d66":"rgba(248,113,113,0.2)")),borderRadius:12,padding:16,marginBottom:16,textAlign:"center"}}>
+        <p style={{fontSize:14,fontWeight:700,margin:"0 0 6px",color:er.mit?(hc?"#16a34a":"#4ade80"):(hc?"#dc2626":"#f87171")}}>{"✓ "+T(er.mit?"paidOff":"unprepared",lang)}</p>
+        <p style={{fontSize:13,color:t.m,margin:0,lineHeight:1.55}}>{er.msg}</p>
+        {tb&&<p style={{fontSize:11,color:"#9b6ec4",margin:"8px 0 0",fontWeight:600}}>📋 {T("trustActive",lang)}</p>}
+      </div>
+      {md&&<a href={md.url} target="_blank" rel="noopener noreferrer" className="tool-link" style={{background:md.bg+(hc?"15":"0d"),border:"1px solid "+md.bg+(hc?"40":"28"),marginBottom:16}}><span style={{fontSize:22}}>{md.icon}</span><div style={{flex:1}}><span style={{fontSize:12,fontWeight:700,color:md.bg}}>{T("explore",lang).split(" ")[0]}: {md.tool} ↗</span><p style={{fontSize:11,color:t.m,margin:"3px 0 0",lineHeight:1.35}}>{ce.tn}</p></div></a>}
+      <div style={{background:hc?"#faf5ea":"rgba(212,160,23,0.05)",border:"1px solid "+(hc?"#e0d0a0":"rgba(212,160,23,0.12)"),borderRadius:10,padding:"12px 14px",marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.acc,margin:"0 0 4px"}}>{T("govInsight",lang)}</p>
+        <p style={{fontSize:11.5,color:t.m,margin:0,lineHeight:1.55,fontStyle:"italic"}}>{ce.gi}</p>
+      </div>
+      {voices.length>0&&<div style={{marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.f,marginBottom:8,letterSpacing:0.5}}>{T("communityVoices",lang)}</p>
+        {voices.map((v,i)=><VC key={i} rk={v.r} text={er.mit?v.y:v.n} hc={hc} cont={getCont(v.r)}/>)}
+      </div>}
+      <div style={{marginBottom:8}}><p style={{fontSize:11,fontWeight:700,color:t.f,marginBottom:8,letterSpacing:0.5}}>{T("scoreUpdate",lang)}</p>{SM.map(s=>{const d=er.after[s.key]-(prev||sc)[s.key];return <SB key={s.key} label={lang==="es"?s.labelEs:s.label} value={er.after[s.key]} color={s.color} icon={s.icon} delta={d} hc={hc}/>})}</div>
+      <OpinionBar value={opinion} hc={hc} label={T("opinion",lang)}/>
+      <Btn onClick={resolve} style={{width:"100%",marginTop:8}}>{rnd>=ROUNDS?T("seeReport",lang):T("beginNext",lang)+" "+(rnd+1)+" →"}</Btn>
+    </div></div>);
+  }
+
+  /* ── GAME OVER ── */
+  if(ph==="over"){
+    const strongest=[...SM].sort((a,b)=>sc[b.key]-sc[a.key])[0];
+    const weakest=[...SM].sort((a,b)=>sc[a.key]-sc[b.key])[0];
+    const topD=[...DEPTS].sort((a,b)=>(totals[b.id]||0)-(totals[a.id]||0))[0];
+    return(<div style={shell} className={hc?"hc":""}>{grade.g==="A"&&<Confetti/>}<div style={bar}><Logo hc={hc}/>{headerBtns}</div>
+    <div key="over" className="phase" style={{background:hc?t.bg:t.grad,padding:"24px 20px",minHeight:"90vh"}}>
+      <div style={{textAlign:"center",marginBottom:22}}>
+        <p style={{fontSize:11,color:t.acc,letterSpacing:3,fontWeight:600,marginBottom:14}}>{T("govReport",lang)}</p>
+        <div className="grade-circle" style={{width:90,height:90,borderRadius:"50%",margin:"0 auto 12px",display:"flex",alignItems:"center",justifyContent:"center",background:grade.g<="B"?"linear-gradient(135deg,#D4A017,#f4d03f)":grade.g==="C"?"linear-gradient(135deg,#f39c12,#fbbf24)":"linear-gradient(135deg,#c0392b,#f87171)",fontSize:44,fontWeight:900,color:"#1a1a2e",boxShadow:"0 4px 20px rgba(212,160,23,0.3)"}}>{grade.g}</div>
+        <h2 style={{fontSize:22,fontWeight:800,margin:"0 0 6px",color:t.tx}}>{lang==="es"?grade.tEs:grade.t}</h2>
+        <p style={{fontSize:13,color:t.m,margin:"0 0 4px",lineHeight:1.55}}>{lang==="es"?grade.mEs:grade.m}</p>
+        <p style={{fontSize:12,color:t.f,margin:0}}>Average: {avg}/100 · {T("difficulty",lang)}: {T(diff,lang)}</p>
+      </div>
+      {/* Epilogue */}
+      <div style={{background:t.abg,border:"1px solid "+(hc?"#ddb":"rgba(212,160,23,0.18)"),borderRadius:12,padding:16,marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.acc,letterSpacing:1,marginBottom:6}}>{T("epilogue",lang)}</p>
+        <p style={{fontSize:13,color:t.m,margin:0,lineHeight:1.65,fontStyle:"italic"}}>{epilogue}</p>
+      </div>
+      {/* Gov Style */}
+      <div style={{background:t.abg,border:"1px solid "+(hc?"#ddb":"rgba(212,160,23,0.18)"),borderRadius:12,padding:16,marginBottom:16}}>
+        <p style={{fontSize:12,fontWeight:700,color:t.acc,margin:"0 0 4px"}}>{T("govStyle",lang)}</p>
+        <p style={{fontSize:16,fontWeight:800,color:t.tx,margin:"0 0 6px"}}>{lang==="es"?gSt.tEs:gSt.t}</p>
+        <p style={{fontSize:12.5,color:t.m,margin:0,lineHeight:1.55}}>{gSt.d}</p>
+        <p style={{fontSize:11,color:t.f,margin:"10px 0 0"}}>Top: {topD.icon} {lang==="es"?topD.nameEs:topD.name} · Best: {strongest.icon} · Weakest: {weakest.icon}</p>
+      </div>
+      {/* Disability */}
+      <div style={{background:hc?"rgba(100,100,200,0.05)":"rgba(100,100,255,0.05)",border:"1px solid "+(hc?"#aab":"rgba(100,100,255,0.12)"),borderRadius:12,padding:16,marginBottom:16}}>
+        <p style={{fontSize:12,fontWeight:700,color:"#818cf8",margin:"0 0 4px"}}>♿ {T("disAssess",lang)}</p>
+        <p style={{fontSize:15,fontWeight:800,color:disA.c,margin:"0 0 8px"}}>{lang==="es"?disA.tEs:disA.t}</p>
+        <div className="voice-card" style={{background:hc?"#f0f0f0":"rgba(255,255,255,0.04)",border:hc?"1px solid #bbb":"1px solid rgba(255,255,255,0.06)"}}><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:5}}><span style={{fontSize:18}}>♿</span><span style={{fontSize:12,fontWeight:700,color:hc?"#111":"#d0c8b8"}}>Maya Chen</span><span style={{fontSize:11,color:hc?"#555":"#778",marginLeft:4}}>34 · West Philadelphia</span></div><p style={{fontSize:12.5,color:hc?"#333":"#a8a098",margin:0,lineHeight:1.55,fontStyle:"italic"}}>"{disA.q}"</p></div>
+      </div>
+      {/* Achievements */}
+      {unlockedAchs.length>0&&<div style={{marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.acc,letterSpacing:1,marginBottom:8}}>{T("achievements",lang)}</p>
+        <div style={{display:"flex",flexWrap:"wrap"}}>{unlockedAchs.map((id,i)=>{const a=ACHS.find(x=>x.id===id);return a?<div key={id} className="achieve-badge" style={{animationDelay:i*0.15+"s",color:t.m}}><span style={{fontSize:16}}>{a.icon}</span><div><div style={{fontWeight:700,color:t.tx,fontSize:12}}>{a.n}</div><div style={{fontSize:10,color:t.f}}>{a.d}</div></div></div>:null})}</div>
+      </div>}
+      {/* Scores */}
+      <div style={{marginBottom:8}}>{SM.map(s=><SB key={s.key} label={lang==="es"?s.labelEs:s.label} value={sc[s.key]} color={s.color} icon={s.icon} hc={hc}/>)}</div>
+      <OpinionBar value={opinion} hc={hc} label={T("opinion",lang)}/>
+      <div style={{background:t.cg,border:"1px solid "+t.cb,borderRadius:12,padding:"14px 10px 6px",marginBottom:16}}><p style={{fontSize:11,fontWeight:700,color:t.f,margin:"0 0 8px 6px",letterSpacing:0.5}}>{T("scoreEvo",lang)}</p><ScoreChart data={sh} t={t} lang={lang}/></div>
+      {/* Tools */}
+      <div style={{marginBottom:16}}>
+        <p style={{fontSize:12,fontWeight:700,color:t.acc,marginBottom:10}}>{T("explore",lang)}</p>
+        {DEPTS.map(d=><a key={d.id} href={d.url} target="_blank" rel="noopener noreferrer" className="tool-link" style={{background:t.cg,border:"1px solid "+t.cb}}><span style={{fontSize:18}}>{d.icon}</span><span style={{fontSize:12.5,fontWeight:700,color:d.bg}}>{d.tool}</span><span style={{fontSize:11,color:t.f,marginLeft:"auto"}}>↗</span></a>)}
+        {XT.map(x=><a key={x.n} href={x.u} target="_blank" rel="noopener noreferrer" className="tool-link" style={{background:t.cg,border:"1px solid "+t.cb}}><span style={{fontSize:18}}>🔧</span><span style={{fontSize:12,fontWeight:600,color:t.m}}>{x.n}</span><span style={{fontSize:11,color:t.f,marginLeft:"auto"}}>↗</span></a>)}
+      </div>
+      {/* What Can I Do */}
+      <div style={{marginBottom:16}}>
+        <p style={{fontSize:12,fontWeight:700,color:t.acc,marginBottom:10}}>{T("whatCanIDo",lang)}</p>
+        {CIVIC.map(c=><a key={c.t} href={c.u} target="_blank" rel="noopener noreferrer" className="tool-link" style={{background:t.cg,border:"1px solid "+t.cb}}><span style={{fontSize:14}}>→</span><div><span style={{fontSize:12,fontWeight:700,color:t.tx}}>{c.t}</span><p style={{fontSize:11,color:t.m,margin:"2px 0 0"}}>{c.d}</p></div></a>)}
+      </div>
+      {/* Readings */}
+      <div style={{marginBottom:16}}>
+        <p style={{fontSize:12,fontWeight:700,color:t.acc,marginBottom:10}}>{T("readings",lang)}</p>
+        {READINGS.map(r=><a key={r.t} href={r.u} target="_blank" rel="noopener noreferrer" className="tool-link" style={{background:t.cg,border:"1px solid "+t.cb}}><div><span style={{fontSize:12,fontWeight:700,color:t.tx}}>{r.t}</span><p style={{fontSize:10,color:t.f,margin:"2px 0 0"}}>{r.s}</p></div><span style={{fontSize:11,color:t.f,marginLeft:"auto"}}>↗</span></a>)}
+      </div>
+      {/* QR + Scan */}
+      <div style={{textAlign:"center",marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.f,letterSpacing:0.5,marginBottom:6}}>{T("scanToPlay",lang)}</p>
+        <QR/><p style={{fontSize:10,color:t.f}}>meyeringn.github.io/sim-philly-2000</p>
+      </div>
+      {/* Leaderboard */}
+      {lb.length>0&&<div style={{background:t.cg,border:"1px solid "+t.cb,borderRadius:10,padding:"12px 14px",marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.f,margin:"0 0 8px"}}>{T("leaderboard",lang)}</p>
+        {lb.map((s,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",fontSize:12,color:t.m,padding:"4px 0",borderBottom:"1px solid "+t.cb}}><span>{i+1}. {s.sty}</span><span style={{fontWeight:700,color:t.acc}}>{s.g} ({s.avg})</span></div>)}
+      </div>}
+      {/* Data Sources */}
+      <div style={{background:t.cg,border:"1px solid "+t.cb,borderRadius:10,padding:"12px 14px",marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.f,margin:"0 0 6px"}}>{T("dataSources",lang)}</p>
+        <p style={{fontSize:10.5,color:t.m,margin:0,lineHeight:1.65}}>Pew, "Philadelphia 2026" · Brookings, "SE PA Market Assessment" · Pew, "Gen Z Likes Philadelphia" · Pew, "Guiding Document at 75" · Opportunity Insights</p>
+      </div>
+      {/* Action buttons */}
+      <div style={{display:"flex",gap:8,marginBottom:8}}>
+        <Btn onClick={share} style={{flex:1,fontSize:13,background:cp?"#16a34a":"#D4A017"}}>{cp?"✓ "+T("copied",lang):"📋 "+T("share",lang)}</Btn>
+        <a href={tweetUrl} target="_blank" rel="noopener noreferrer" className="btn" style={{flex:1,fontSize:13,textAlign:"center",textDecoration:"none",display:"flex",alignItems:"center",justifyContent:"center"}}>𝕏 Tweet</a>
+      </div>
+      <div style={{display:"flex",gap:8,marginBottom:8}}>
+        <Btn onClick={()=>genImg(grade,sc,gSt,disA,avg)} style={{flex:1,fontSize:12,background:"transparent",border:"1px solid "+t.acc,color:t.acc}}>📸 {T("downloadImg",lang)}</Btn>
+        <Btn onClick={()=>printReport(grade,sc,gSt,disA,avg,lang)} style={{flex:1,fontSize:12,background:"transparent",border:"1px solid "+t.acc,color:t.acc}}>🖨 {T("printReport",lang)}</Btn>
+      </div>
+      <div style={{display:"flex",gap:8,marginBottom:16}}>
+        <Btn onClick={()=>{navigator.clipboard.writeText(challengeUrl);alert(lang==="es"?"¡Enlace copiado!":"Challenge link copied!")}} style={{flex:1,fontSize:12,background:"transparent",border:"1px solid "+t.acc,color:t.acc}}>🔗 {T("challengeFriend",lang)}</Btn>
+        <Btn onClick={()=>setShowEmbed(!showEmbed)} style={{flex:1,fontSize:12,background:"transparent",border:"1px solid "+t.acc,color:t.acc}}>{"</>"} {T("embedCode",lang)}</Btn>
+      </div>
+      {showEmbed&&<div style={{background:t.cg,border:"1px solid "+t.cb,borderRadius:8,padding:12,marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.f,margin:"0 0 6px"}}>Embed code:</p>
+        <textarea readOnly value={embedCode} style={{width:"100%",height:60,background:t.bg,color:t.acc,border:"1px solid "+t.cb,borderRadius:6,padding:8,fontSize:11,fontFamily:"monospace",resize:"none"}} onClick={e=>e.target.select()}/>
+      </div>}
+      {/* Credits */}
+      <div style={{background:t.abg,border:"1px solid "+(hc?"#ddb":"rgba(212,160,23,0.12)"),borderRadius:12,padding:16,marginBottom:16,textAlign:"center"}}>
+        <p style={{fontSize:12.5,color:t.m,margin:0,lineHeight:1.7}}>Built by <strong style={{color:t.acc}}>Nico Meyering, MPA</strong><br/><span style={{fontSize:11,color:t.f}}>Chairman, Mayor's Commission on People with Disabilities<br/>VP, Net Impact Philly · Board, Disability Pride PA<br/>Steering Committee, Transit Forward Philadelphia</span></p>
+      </div>
+      <Btn onClick={start} style={{width:"100%"}}>{T("playAgain",lang)}</Btn>
+    </div></div>);
+  }
+  return null;
+}
+
+ReactDOM.render(<App/>,document.getElementById("root"));
+</script>
+</body>
+</html>
