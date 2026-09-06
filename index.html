@@ -2,26 +2,103 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <title>SimPhilly 2000 — Climate Equity City Builder</title>
 <meta name="description" content="A climate equity city builder for Philadelphia. Every department is a real civic tech tool. Plan. Build. Grow Philadelphia.">
 <meta property="og:title" content="SimPhilly 2000 — Climate Equity City Builder">
 <meta property="og:description" content="Can you govern Philadelphia through the climate crisis? Every department is a real civic tech tool built for Philly.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23D4A017'/><text x='16' y='22' text-anchor='middle' font-size='14' font-weight='900' fill='%231a1a2e' font-family='system-ui'>SP</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:#10172a;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;}
-  button{font-family:inherit;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#10172a;font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;}
+button{font-family:inherit;-webkit-tap-highlight-color:transparent;}
+a{-webkit-tap-highlight-color:transparent;}
+
+/* Focus */
+*:focus-visible{outline:2px solid #D4A017;outline-offset:2px;border-radius:4px;}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes gradeReveal{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,160,23,0.4)}50%{box-shadow:0 0 0 6px rgba(212,160,23,0)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+/* Phase transitions */
+.phase{animation:fadeIn 0.35s ease-out both;}
+
+/* Splash */
+#splash{position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 30%,#1f2d50 0%,#10172a 70%);transition:opacity 0.4s ease;}
+#splash.hidden{opacity:0;pointer-events:none;}
+#splash .logo-sim{background:linear-gradient(135deg,#D4A017,#f4d03f);padding:2px 12px;font-size:20px;font-weight:900;color:#1a1a2e;letter-spacing:1px;}
+#splash .logo-philly{font-size:32px;font-weight:900;color:#fff;letter-spacing:3px;margin-left:6px;}
+#splash .loading{margin-top:24px;font-size:12px;color:#667;letter-spacing:2px;
+  background:linear-gradient(90deg,#667 0%,#D4A017 50%,#667 100%);background-size:200% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 2s linear infinite;}
+
+/* Buttons */
+.btn{padding:14px 24px;border:none;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.3px;
+  cursor:pointer;transition:all 0.15s ease;position:relative;overflow:hidden;
+  background:#D4A017;color:#1a1a2e;}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 4px 12px rgba(212,160,23,0.3);}
+.btn:active{transform:translateY(0) scale(0.97);filter:brightness(0.95);box-shadow:none;}
+.btn:disabled{background:#444;color:#888;opacity:0.5;cursor:not-allowed;transform:none;filter:none;box-shadow:none;}
+
+/* Allocation buttons */
+.alloc-btn{width:44px;height:44px;border-radius:50%;font-size:20px;font-weight:700;
+  cursor:pointer;transition:all 0.12s ease;display:flex;align-items:center;justify-content:center;line-height:1;}
+.alloc-btn:hover:not(:disabled){transform:scale(1.12);}
+.alloc-btn:active:not(:disabled){transform:scale(0.88);}
+.alloc-btn:disabled{cursor:not-allowed;opacity:0.2;}
+
+/* Department cards */
+.dept-card{border-radius:10px;padding:12px 16px;margin-bottom:8px;transition:all 0.2s ease;cursor:default;}
+.dept-card:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+
+/* Score bar fill */
+.score-fill{height:100%;border-radius:6px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1);}
+
+/* Tool links */
+.tool-link{display:flex;align-items:center;gap:10px;border-radius:8px;padding:10px 14px;margin-bottom:5px;
+  text-decoration:none;transition:all 0.15s ease;}
+.tool-link:hover{transform:translateX(3px);}
+
+/* Voice cards */
+.voice-card{border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:all 0.2s ease;}
+
+/* Progress */
+.progress{display:flex;gap:8px;justify-content:center;padding:10px 0 4px;}
+.progress-dot{width:10px;height:10px;border-radius:50%;transition:all 0.3s ease;}
+.progress-dot.done{background:#D4A017;}
+.progress-dot.active{background:#D4A017;animation:pulse 1.5s ease infinite;}
+.progress-dot.future{background:rgba(255,255,255,0.12);}
+
+/* Grade circle */
+.grade-circle{animation:gradeReveal 0.6s cubic-bezier(0.34,1.56,0.64,1) both;}
+
+/* Chart legend */
+.chart-legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:6px 0 2px;}
+.chart-legend span{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:600;}
+.chart-legend span::before{content:'';width:10px;height:3px;border-radius:2px;display:inline-block;}
+
+/* HC overrides */
+.hc .progress-dot.future{background:rgba(0,0,0,0.15);}
 </style>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
 </head>
 <body>
+<div id="splash"><span class="logo-sim">SIM</span><span class="logo-philly">PHILLY 2000</span><div class="loading">LOADING</div></div>
 <div id="root"></div>
 <script type="text/babel">
-const {useState,useCallback,useMemo}=React;
+const {useState,useCallback,useMemo,useEffect}=React;
 
 const DEPTS=[
   {id:"parks",name:"Parks & Canopy",icon:"🌳",bg:"#2d8a4e",disWeight:1,tool:"CanopyWatch",url:"https://meyeringn.github.io/canopy-watch/index",desc:"Plant trees. Cool neighborhoods. Fight heat islands."},
@@ -46,17 +123,7 @@ const EVENTS=[
 ];
 
 const RESIDENTS={maya:{name:"Maya Chen",age:34,loc:"West Philadelphia",role:"Disabled UX designer, wheelchair user",icon:"♿"},james:{name:"James Washington",age:72,loc:"Hunting Park",role:"Retired teacher, senior homeowner",icon:"🏠"},sofia:{name:"Sofia Ramirez",age:28,loc:"Eastwick",role:"Hospital worker, renter, single mom",icon:"👩‍👧"},darnell:{name:"Darnell Thompson",age:41,loc:"Kensington",role:"Corner grocery owner",icon:"🏪"},amara:{name:"Amara Okafor",age:55,loc:"North Philadelphia",role:"Community health worker",icon:"🩺"}};
-
-const VOICES={
-  heat:[{r:"james",y:"Those new trees on Hunting Park Ave made all the difference. First summer I sat on my porch in years.",n:"Three days I couldn't leave my house. My electric bill will take months to pay off on a pension."},{r:"maya",y:"The cooling centers were accessible this time — ramps, automatic doors, ASL interpreters. That matters.",n:"Half the cooling centers didn't have ramps. Where exactly was I supposed to go?"}],
-  flood:[{r:"sofia",y:"My block stayed dry for the first time in years. Those rain gardens actually work.",n:"Third time my basement flooded. My daughter's school things were down there. Nobody warned us."},{r:"amara",y:"The clinic stayed open through the storm. Last time we closed for a week.",n:"We saw mold-related respiratory issues for months. The kids got it worst."}],
-  septa:[{r:"maya",y:"They kept the 34 trolley and the elevators at City Hall station working. I can get to work.",n:"They cut my route. Now it's three transfers and ninety minutes — if the elevators even work."},{r:"darnell",y:"When the buses kept running, my customers kept coming. Transit is my store's lifeline.",n:"Foot traffic dropped 40% after they cut the route. I might have to close."}],
-  airquality:[{r:"amara",y:"Every zip code had a clean-air shelter. We got the word out in four languages.",n:"My patients couldn't breathe and had nowhere to go. We don't have enough shelters."},{r:"darnell",y:"They set up filtration at the rec center. My employees could take breaks there.",n:"I closed the store for two days. Couldn't ask my staff to breathe that air."}],
-  grant:[{r:"sofia",y:"I actually understood the climate plan they posted. For once, a city document that made sense.",n:"A 200-page plan nobody could read. How are we supposed to have a say?"},{r:"james",y:"They held a meeting at the rec center and explained everything in plain English. First time I felt included.",n:"The city got less money because the plan was confusing? That's embarrassing."}],
-  greenjobs:[{r:"sofia",y:"My neighbor just got hired at the solar plant. Full benefits. Off food stamps for the first time.",n:"They built the plant somewhere else. We could've used those jobs in Eastwick."},{r:"darnell",y:"Three regulars got jobs at the new facility. That's three families spending more at my store.",n:"Another opportunity that passed us by. Kensington keeps getting promises, not paychecks."}],
-  summit:[{r:"maya",y:"Philadelphia showed the country that climate policy and disability justice go together. I'm proud of my city.",n:"We hosted a national summit but couldn't explain our own plan. That was hard to watch."},{r:"amara",y:"Researchers came to study what's working. For once, North Philly was the model, not the cautionary tale.",n:"All those visitors and nothing to show them. We're still reacting instead of leading."}],
-  cold:[{r:"james",y:"They opened a warming center two blocks from my house. Checked on me every day. I felt looked after.",n:"My pipes froze. I'm 72, on a fixed income. Nobody came."},{r:"maya",y:"The warming shelters had accessible cots and charging stations. Small things that mean everything.",n:"The shelters were in church basements with stairs. Disabled people were locked out of safety."}],
-};
+const VOICES={heat:[{r:"james",y:"Those new trees on Hunting Park Ave made all the difference. First summer I sat on my porch in years.",n:"Three days I couldn't leave my house. My electric bill will take months to pay off on a pension."},{r:"maya",y:"The cooling centers were accessible this time — ramps, automatic doors, ASL interpreters. That matters.",n:"Half the cooling centers didn't have ramps. Where exactly was I supposed to go?"}],flood:[{r:"sofia",y:"My block stayed dry for the first time in years. Those rain gardens actually work.",n:"Third time my basement flooded. My daughter's school things were down there. Nobody warned us."},{r:"amara",y:"The clinic stayed open through the storm. Last time we closed for a week.",n:"We saw mold-related respiratory issues for months. The kids got it worst."}],septa:[{r:"maya",y:"They kept the 34 trolley and the elevators at City Hall station working. I can get to work.",n:"They cut my route. Now it's three transfers and ninety minutes — if the elevators even work."},{r:"darnell",y:"When the buses kept running, my customers kept coming. Transit is my store's lifeline.",n:"Foot traffic dropped 40% after they cut the route. I might have to close."}],airquality:[{r:"amara",y:"Every zip code had a clean-air shelter. We got the word out in four languages.",n:"My patients couldn't breathe and had nowhere to go. We don't have enough shelters."},{r:"darnell",y:"They set up filtration at the rec center. My employees could take breaks there.",n:"I closed the store for two days. Couldn't ask my staff to breathe that air."}],grant:[{r:"sofia",y:"I actually understood the climate plan they posted. For once, a city document that made sense.",n:"A 200-page plan nobody could read. How are we supposed to have a say?"},{r:"james",y:"They held a meeting at the rec center and explained everything in plain English. First time I felt included.",n:"The city got less money because the plan was confusing? That's embarrassing."}],greenjobs:[{r:"sofia",y:"My neighbor just got hired at the solar plant. Full benefits. Off food stamps for the first time.",n:"They built the plant somewhere else. We could've used those jobs in Eastwick."},{r:"darnell",y:"Three regulars got jobs at the new facility. That's three families spending more at my store.",n:"Another opportunity that passed us by. Kensington keeps getting promises, not paychecks."}],summit:[{r:"maya",y:"Philadelphia showed the country that climate policy and disability justice go together. I'm proud of my city.",n:"We hosted a national summit but couldn't explain our own plan. That was hard to watch."},{r:"amara",y:"Researchers came to study what's working. For once, North Philly was the model, not the cautionary tale.",n:"All those visitors and nothing to show them. We're still reacting instead of leading."}],cold:[{r:"james",y:"They opened a warming center two blocks from my house. Checked on me every day. I felt looked after.",n:"My pipes froze. I'm 72, on a fixed income. Nobody came."},{r:"maya",y:"The warming shelters had accessible cots and charging stations. Small things that mean everything.",n:"The shelters were in church basements with stairs. Disabled people were locked out of safety."}]};
 
 const SCORE_META=[{key:"equity",label:"Equity",color:"#e74c3c",icon:"⚖️"},{key:"resilience",label:"Resilience",color:"#3498db",icon:"🛡️"},{key:"carbon",label:"Carbon Reduction",color:"#27ae60",icon:"🌱"},{key:"health",label:"Community Health",color:"#f39c12",icon:"❤️"}];
 const GRADES=[{min:80,grade:"A",title:"Climate Champion",msg:"Philadelphia is a national model for equitable climate action. Other cities are calling."},{min:65,grade:"B",title:"Sustainability Leader",msg:"Strong progress — but frontline communities need you to keep pushing."},{min:50,grade:"C",title:"Making Progress",msg:"Some wins, but the climate crisis moves faster than your budget."},{min:35,grade:"D",title:"Falling Behind",msg:"Philadelphia's most vulnerable are paying the price for underinvestment."},{min:0,grade:"F",title:"Climate Crisis",msg:"The city is unprepared. The next storm will be catastrophic."}];
@@ -64,46 +131,41 @@ const DIS_ASSESS=[{min:20,title:"Disability-Forward Governance",quote:"My city s
 const EXTRA_TOOLS=[{name:"Climate Crossover",url:"https://meyeringn.github.io/climate-crossover",desc:"Climate career translator"},{name:"Climate Equity Policy Simulator",url:"https://meyeringn.github.io/climate-policy-simulator",desc:"Model policy trade-offs"}];
 const BUDGET=12,ROUNDS=4,INIT_SCORES={equity:32,resilience:28,carbon:22,health:38};
 function clamp(v){return Math.max(0,Math.min(100,v));}
+function govStyle(t){const v=Object.values(t);const a=v.reduce((x,y)=>x+y,0)/v.length;if(v.every(x=>x<=a*1.6&&x>=a*0.4))return{title:"Balanced Administrator",desc:"You spread resources evenly — stability is a choice, but transformative change requires focus."};const s=Object.entries(t).sort(([,x],[,y])=>y-x)[0][0];const m={people:{title:"Community-First Leader",desc:"You centered the people most affected. Equity isn't a side goal — it's the strategy."},policy:{title:"Systems Thinker",desc:"You invested in the rules that shape everything else. Policy is the multiplier."},parks:{title:"Green Infrastructure Champion",desc:"You built the living systems that cool, clean, and protect. Trees are policy."},refuge:{title:"Protector-in-Chief",desc:"You prioritized keeping people safe when the climate hits hardest."},transit:{title:"Mobility Champion",desc:"You understood that transit connects everything — jobs, health, opportunity, justice."},flood:{title:"Resilience Builder",desc:"You invested in infrastructure that will outlast your term."}};return m[s]||{title:"Pragmatic Leader",desc:"You made tough calls with limited resources. That's governance."};}
 
-function govStyle(totals){
-  const vals=Object.values(totals);const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
-  const balanced=vals.every(v=>v<=avg*1.6&&v>=avg*0.4);
-  if(balanced) return{title:"Balanced Administrator",desc:"You spread resources evenly — stability is a choice, but transformative change requires focus."};
-  const sorted=Object.entries(totals).sort(([,a],[,b])=>b-a);const top=sorted[0][0];
-  if(top==="people") return{title:"Community-First Leader",desc:"You centered the people most affected. Equity isn't a side goal — it's the strategy."};
-  if(top==="policy") return{title:"Systems Thinker",desc:"You invested in the rules that shape everything else. Policy is the multiplier."};
-  if(top==="parks") return{title:"Green Infrastructure Champion",desc:"You built the living systems that cool, clean, and protect. Trees are policy."};
-  if(top==="refuge") return{title:"Protector-in-Chief",desc:"You prioritized keeping people safe when the climate hits hardest."};
-  if(top==="transit") return{title:"Mobility Champion",desc:"You understood that transit connects everything — jobs, health, opportunity, justice."};
-  if(top==="flood") return{title:"Resilience Builder",desc:"You invested in infrastructure that will outlast your term."};
-  return{title:"Pragmatic Leader",desc:"You made tough calls with limited resources. That's governance."};
-}
-
-/* SVG Chart — replaces Recharts for zero-dependency deployment */
 function ScoreChart({data,t}){
-  if(!data||data.length<2) return null;
-  const W=360,H=150,P={t:12,r:16,b:22,l:32};
-  const pW=W-P.l-P.r,pH=H-P.t-P.b;
-  const keys=SCORE_META.map(s=>({key:s.key,color:s.color,label:s.label}));
-  return(
-    <svg viewBox={`0 0 ${W} ${H}`} style={{width:"100%",display:"block"}} role="img" aria-label="Score evolution chart">
+  if(!data||data.length<2)return null;
+  const W=360,H=150,P={t:12,r:16,b:22,l:32},pW=W-P.l-P.r,pH=H-P.t-P.b;
+  return(<div>
+    <svg viewBox={"0 0 "+W+" "+H} style={{width:"100%",display:"block"}} role="img" aria-label="Score evolution chart">
       {[0,25,50,75,100].map(v=>{const y=P.t+pH-(v/100)*pH;return(<g key={v}><line x1={P.l} y1={y} x2={W-P.r} y2={y} stroke={t.cardBorder} strokeWidth={0.5}/><text x={P.l-4} y={y+3} fontSize={8} fill={t.muted} textAnchor="end">{v}</text></g>);})}
       {data.map((d,i)=>{const x=P.l+(i/(data.length-1))*pW;return <text key={i} x={x} y={H-4} fontSize={8} fill={t.muted} textAnchor="middle">{d.year}</text>;})}
-      {keys.map(({key,color})=>{
-        const pts=data.map((d,i)=>({x:P.l+(i/(data.length-1))*pW,y:P.t+pH-((d[key]||0)/100)*pH}));
-        const path=pts.map((p,i)=>`${i===0?"M":"L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
-        return(<g key={key}><path d={path} fill="none" stroke={color} strokeWidth={2}/>{pts.map((p,i)=><circle key={i} cx={p.x} cy={p.y} r={2.5} fill={color}/>)}</g>);
-      })}
+      {SCORE_META.map(({key,color})=>{const pts=data.map((d,i)=>({x:P.l+(i/(data.length-1))*pW,y:P.t+pH-((d[key]||0)/100)*pH}));const path=pts.map((p,i)=>(i===0?"M":"L")+p.x.toFixed(1)+","+p.y.toFixed(1)).join(" ");return(<g key={key}><path d={path} fill="none" stroke={color} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"/>{pts.map((p,i)=><circle key={i} cx={p.x} cy={p.y} r={3} fill={color} stroke={t.bg} strokeWidth={1.5}/>)}</g>);})}
     </svg>
-  );
+    <div className="chart-legend">
+      {SCORE_META.map(s=><span key={s.key} style={{color:t.muted}}><span style={{display:"inline-block",width:10,height:3,borderRadius:2,background:s.color,marginRight:3}}/>{s.label}</span>)}
+    </div>
+  </div>);
 }
 
 function ScoreBar({label,value,color,icon,delta,hc}){
-  return(<div style={{marginBottom:6}}><div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:2,fontWeight:600,color:hc?"#111":"#d0c8b8"}}><span>{icon} {label}</span><span style={{display:"flex",alignItems:"center",gap:4}}>{delta!==undefined&&delta!==0&&<span style={{color:delta>0?"#16a34a":"#dc2626",fontSize:11,fontWeight:700}}>{delta>0?"+":""}{Math.round(delta)}</span>}{Math.round(value)}</span></div><div style={{height:12,borderRadius:6,background:hc?"#ddd":"rgba(255,255,255,0.08)",overflow:"hidden"}}><div style={{height:"100%",width:clamp(value)+"%",background:color,borderRadius:6,transition:"width 0.7s ease"}}/></div></div>);
+  return(<div style={{marginBottom:7}}>
+    <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:3,fontWeight:600,color:hc?"#111":"#d0c8b8"}}>
+      <span>{icon} {label}</span>
+      <span style={{display:"flex",alignItems:"center",gap:4}}>
+        {delta!==undefined&&delta!==0&&<span style={{color:delta>0?"#16a34a":"#dc2626",fontSize:11,fontWeight:700}}>{delta>0?"+":""}{Math.round(delta)}</span>}
+        {Math.round(value)}
+      </span>
+    </div>
+    <div style={{height:14,borderRadius:7,background:hc?"#ddd":"rgba(255,255,255,0.08)",overflow:"hidden"}}>
+      <div className="score-fill" style={{width:clamp(value)+"%",background:color}}/>
+    </div>
+  </div>);
 }
-function Btn({children,onClick,style,disabled}){return <button onClick={onClick} disabled={disabled} style={{padding:"12px 24px",border:"none",borderRadius:8,fontWeight:700,fontSize:14,cursor:disabled?"not-allowed":"pointer",background:disabled?"#555":"#D4A017",color:disabled?"#999":"#1a1a2e",opacity:disabled?0.5:1,transition:"all 0.2s",letterSpacing:0.3,...style}}>{children}</button>;}
-function Logo({hc}){return(<div style={{display:"inline-flex",alignItems:"baseline",gap:4}}><span style={{background:"linear-gradient(135deg,#D4A017,#f4d03f)",padding:"1px 8px",fontSize:14,fontWeight:900,color:"#1a1a2e",letterSpacing:1}}>SIM</span><span style={{fontSize:18,fontWeight:900,color:hc?"#111":"#fff",letterSpacing:1}}>PHILLY</span><span style={{fontSize:12,fontWeight:700,color:"#D4A017"}}>2000</span></div>);}
-function VoiceCard({residentKey,text,hc}){const r=RESIDENTS[residentKey];return(<div style={{background:hc?"#f0f0f0":"rgba(255,255,255,0.04)",border:hc?"1px solid #bbb":"1px solid rgba(255,255,255,0.06)",borderRadius:8,padding:"10px 12px",marginBottom:6}}><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}><span style={{fontSize:16}}>{r.icon}</span><div><span style={{fontSize:12,fontWeight:700,color:hc?"#111":"#d0c8b8"}}>{r.name}</span><span style={{fontSize:11,color:hc?"#555":"#667",marginLeft:6}}>{r.age} · {r.loc}</span></div></div><p style={{fontSize:12,color:hc?"#333":"#a0a098",margin:0,lineHeight:1.5,fontStyle:"italic"}}>"{text}"</p></div>);}
+function Btn({children,onClick,style,disabled}){return <button className="btn" onClick={onClick} disabled={disabled} style={style}>{children}</button>;}
+function Logo({hc}){return(<div style={{display:"inline-flex",alignItems:"baseline",gap:4}}><span style={{background:"linear-gradient(135deg,#D4A017,#f4d03f)",padding:"1px 8px",fontSize:14,fontWeight:900,color:"#1a1a2e",letterSpacing:1,borderRadius:2}}>SIM</span><span style={{fontSize:18,fontWeight:900,color:hc?"#111":"#fff",letterSpacing:1}}>PHILLY</span><span style={{fontSize:12,fontWeight:700,color:"#D4A017"}}>2000</span></div>);}
+function Progress({round,total,hc}){return(<div className="progress">{Array.from({length:total},(_,i)=><div key={i} className={"progress-dot "+(i<round-1?"done":i===round-1?"active":"future")}/>)}</div>);}
+function VoiceCard({residentKey,text,hc}){const r=RESIDENTS[residentKey];return(<div className="voice-card" style={{background:hc?"#f0f0f0":"rgba(255,255,255,0.04)",border:hc?"1px solid #bbb":"1px solid rgba(255,255,255,0.06)"}}><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:5}}><span style={{fontSize:18,lineHeight:1}}>{r.icon}</span><div><span style={{fontSize:12,fontWeight:700,color:hc?"#111":"#d0c8b8"}}>{r.name}</span><span style={{fontSize:11,color:hc?"#555":"#778",marginLeft:6}}>{r.age} · {r.loc}</span></div></div><p style={{fontSize:12.5,color:hc?"#333":"#a8a098",margin:0,lineHeight:1.55,fontStyle:"italic"}}>"{text}"</p></div>);}
 
 function SimPhilly2000(){
   const [phase,setPhase]=useState("title");
@@ -120,32 +182,17 @@ function SimPhilly2000(){
   const [copied,setCopied]=useState(false);
   const [trustBonus,setTrustBonus]=useState(false);
 
+  useEffect(()=>{const s=document.getElementById("splash");if(s)s.classList.add("hidden");},[]);
+  useEffect(()=>{window.scrollTo({top:0});},[phase,round]);
+
   const spent=Object.values(alloc).reduce((a,b)=>a+b,0);
   const remaining=BUDGET-spent;
-  const t=hc?{bg:"#fff",bg2:"#f4f4f4",text:"#111",muted:"#444",faint:"#777",cardBg:"#f0f0f0",cardBorder:"#aaa",accent:"#b8860b",accentBg:"rgba(184,134,11,0.1)",gradBg:"#f8f8f8"}:{bg:"#10172a",bg2:"#1a2744",text:"#e0d8c8",muted:"#8890a4",faint:"#3a4260",cardBg:"rgba(255,255,255,0.025)",cardBorder:"rgba(255,255,255,0.05)",accent:"#D4A017",accentBg:"rgba(212,160,23,0.08)",gradBg:"radial-gradient(ellipse at 50% 30%,#1f2d50 0%,#10172a 70%)"};
+  const t=hc?{bg:"#fff",text:"#111",muted:"#444",faint:"#888",cardBg:"#f0f0f0",cardBorder:"#bbb",accent:"#b8860b",accentBg:"rgba(184,134,11,0.08)",gradBg:"#f8f8f8"}:{bg:"#10172a",text:"#e0d8c8",muted:"#8890a4",faint:"#3a4260",cardBg:"rgba(255,255,255,0.03)",cardBorder:"rgba(255,255,255,0.06)",accent:"#D4A017",accentBg:"rgba(212,160,23,0.07)",gradBg:"radial-gradient(ellipse at 50% 30%,#1f2d50 0%,#10172a 70%)"};
 
   const startGame=useCallback(()=>{setRound(1);setScores({...INIT_SCORES});setPrevScores(null);setAlloc(Object.fromEntries(DEPTS.map(d=>[d.id,0])));setEvents([...EVENTS].sort(()=>Math.random()-0.5).slice(0,ROUNDS));setCurEvent(null);setEventResult(null);setHistory([]);setScoreHist([{year:"Start",...INIT_SCORES}]);setCopied(false);setTrustBonus(false);setPhase("intro");},[]);
   const adjustAlloc=useCallback((dept,delta)=>{setAlloc(prev=>{const next=prev[dept]+delta;const others=Object.entries(prev).filter(([k])=>k!==dept).reduce((s,[,v])=>s+v,0);if(next<0||others+next>BUDGET)return prev;return{...prev,[dept]:next};});},[]);
-
-  const confirmAllocation=useCallback(()=>{
-    const hasTrust=alloc.policy>=2;setTrustBonus(hasTrust);const mult=hasTrust?1.15:1.0;
-    const ns={...scores};
-    Object.entries(alloc).forEach(([dept,pts])=>{const factor=dept==="policy"?1.0:mult;Object.entries(IMPACTS[dept]).forEach(([sk,m])=>{ns[sk]=clamp(ns[sk]+pts*m*factor);});});
-    setPrevScores({...scores});setScores(ns);
-    const ev=events[round-1];setCurEvent(ev);const invested=alloc[ev.mitigatedBy]||0;const mitigated=invested>=2;
-    const rs={...ns};
-    if(ev.damage)Object.entries(ev.damage).forEach(([k,v])=>{rs[k]=clamp(rs[k]+v*(mitigated?0.35:1));});
-    if(ev.bonus)Object.entries(ev.bonus).forEach(([k,v])=>{rs[k]=clamp(rs[k]+v*(mitigated?1:0.25));});
-    setEventResult({mitigated,msg:mitigated?ev.mitigateMsg:ev.failMsg,before:ns,after:rs});
-    setHistory(prev=>[...prev,{round,alloc:{...alloc},eventId:ev.id,mitigated}]);setPhase("event");
-  },[scores,alloc,events,round]);
-
-  const resolveEvent=useCallback(()=>{
-    setScores(eventResult.after);
-    setScoreHist(prev=>[...prev,{year:"Year "+round,...Object.fromEntries(Object.keys(eventResult.after).map(k=>[k,Math.round(eventResult.after[k])]))}]);
-    if(round>=ROUNDS){setPhase("gameOver");return;}
-    setRound(r=>r+1);setAlloc(Object.fromEntries(DEPTS.map(d=>[d.id,0])));setPrevScores(null);setPhase("allocate");
-  },[eventResult,round]);
+  const confirmAllocation=useCallback(()=>{const hasTrust=alloc.policy>=2;setTrustBonus(hasTrust);const mult=hasTrust?1.15:1.0;const ns={...scores};Object.entries(alloc).forEach(([dept,pts])=>{const factor=dept==="policy"?1.0:mult;Object.entries(IMPACTS[dept]).forEach(([sk,m])=>{ns[sk]=clamp(ns[sk]+pts*m*factor);});});setPrevScores({...scores});setScores(ns);const ev=events[round-1];setCurEvent(ev);const invested=alloc[ev.mitigatedBy]||0;const mitigated=invested>=2;const rs={...ns};if(ev.damage)Object.entries(ev.damage).forEach(([k,v])=>{rs[k]=clamp(rs[k]+v*(mitigated?0.35:1));});if(ev.bonus)Object.entries(ev.bonus).forEach(([k,v])=>{rs[k]=clamp(rs[k]+v*(mitigated?1:0.25));});setEventResult({mitigated,msg:mitigated?ev.mitigateMsg:ev.failMsg,before:ns,after:rs});setHistory(prev=>[...prev,{round,alloc:{...alloc},eventId:ev.id,mitigated}]);setPhase("event");},[scores,alloc,events,round]);
+  const resolveEvent=useCallback(()=>{setScores(eventResult.after);setScoreHist(prev=>[...prev,{year:"Year "+round,...Object.fromEntries(Object.keys(eventResult.after).map(k=>[k,Math.round(eventResult.after[k])]))}]);if(round>=ROUNDS){setPhase("gameOver");return;}setRound(r=>r+1);setAlloc(Object.fromEntries(DEPTS.map(d=>[d.id,0])));setPrevScores(null);setPhase("allocate");},[eventResult,round]);
 
   const avg=Math.round(Object.values(scores).reduce((a,b)=>a+b,0)/4);
   const grade=GRADES.find(g=>avg>=g.min)||GRADES[GRADES.length-1];
@@ -155,41 +202,163 @@ function SimPhilly2000(){
   const mitigatedCount=history.filter(h=>h.mitigated).length;
   const disScore=useMemo(()=>{let s=0;DEPTS.forEach(d=>{s+=((totals[d.id]||0)*(d.disWeight||0));});return s;},[totals]);
   const disAssess=DIS_ASSESS.find(d=>disScore>=d.min)||DIS_ASSESS[DIS_ASSESS.length-1];
+  const shareResults=useCallback(()=>{const txt="🏛️ I just governed Philadelphia in SimPhilly 2000!\n\nGrade: "+grade.grade+" — "+grade.title+"\n⚖️ Equity: "+Math.round(scores.equity)+" | 🛡️ Resilience: "+Math.round(scores.resilience)+" | 🌱 Carbon: "+Math.round(scores.carbon)+" | ❤️ Health: "+Math.round(scores.health)+"\nStyle: "+gStyle.title+"\nDisability Equity: "+disAssess.title+"\n\nEvery department is a real climate-justice tool built for Philly.\nhttps://meyeringn.github.io/sim-philly-2000\n#SimPhilly2000 #ClimateEquity #Philadelphia";navigator.clipboard.writeText(txt).then(()=>setCopied(true)).catch(()=>{});},[grade,scores,gStyle,disAssess]);
 
-  const shareResults=useCallback(()=>{
-    const txt="🏛️ I just governed Philadelphia in SimPhilly 2000!\n\nGrade: "+grade.grade+" — "+grade.title+"\n⚖️ Equity: "+Math.round(scores.equity)+" | 🛡️ Resilience: "+Math.round(scores.resilience)+" | 🌱 Carbon: "+Math.round(scores.carbon)+" | ❤️ Health: "+Math.round(scores.health)+"\nStyle: "+gStyle.title+"\nDisability Equity: "+disAssess.title+"\n\nEvery department is a real climate-justice tool built for Philly.\nhttps://meyeringn.github.io/sim-philly-2000\n#SimPhilly2000 #ClimateEquity #Philadelphia";
-    navigator.clipboard.writeText(txt).then(()=>setCopied(true)).catch(()=>{});
-  },[grade,scores,gStyle,disAssess]);
-
-  const shell={minHeight:"100vh",background:t.bg,color:t.text,fontFamily:"'Segoe UI',system-ui,-apple-system,sans-serif",maxWidth:480,margin:"0 auto"};
-  const bar={background:"linear-gradient(135deg,#D4A017 0%,#b8860b 100%)",padding:"10px 16px",display:"flex",justifyContent:"space-between",alignItems:"center"};
-  const hcBtn={background:"none",border:"1px solid "+(hc?"#888":"rgba(255,255,255,0.2)"),borderRadius:6,padding:"3px 8px",fontSize:11,fontWeight:700,color:hc?"#333":"#1a1a2e",cursor:"pointer",opacity:0.8};
+  const shell={minHeight:"100vh",background:t.bg,color:t.text,maxWidth:480,margin:"0 auto"};
+  const topBar={background:"linear-gradient(135deg,#D4A017 0%,#b8860b 100%)",padding:"10px 16px",display:"flex",justifyContent:"space-between",alignItems:"center"};
+  const hcBtnStyle={background:"none",border:"1px solid "+(hc?"#888":"rgba(255,255,255,0.25)"),borderRadius:6,padding:"4px 10px",fontSize:11,fontWeight:700,color:hc?"#444":"#1a1a2e",cursor:"pointer"};
+  const section={padding:"16px 20px"};
+  const card=(active,color)=>({background:active?(color+(hc?"22":"10")):t.cardBg,border:"1px solid "+(active?(color+(hc?"55":"35")):t.cardBorder)});
 
   /* TITLE */
-  if(phase==="title")return(<div style={shell}><div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:"100vh",padding:28,textAlign:"center",background:t.gradBg,position:"relative"}}><div style={{position:"absolute",top:16,right:16}}><button onClick={()=>setHc(!hc)} style={{...hcBtn,color:hc?"#333":"#aaa"}} aria-label="Toggle high contrast">{hc?"◑ Standard":"◐ High Contrast"}</button></div><div style={{display:"inline-flex",alignItems:"baseline",gap:6}}><span style={{background:"linear-gradient(135deg,#D4A017,#f4d03f)",padding:"2px 14px",fontSize:26,fontWeight:900,color:"#1a1a2e",letterSpacing:1}}>SIM</span><span style={{fontSize:40,fontWeight:900,color:hc?"#111":"#fff",letterSpacing:3}}>PHILLY</span><span style={{fontSize:22,fontWeight:700,color:"#D4A017"}}>2000</span></div><p style={{fontSize:11,letterSpacing:4,margin:"6px 0 36px",color:t.accent,fontWeight:600}}>THE CLIMATE EQUITY CITY BUILDER</p><div style={{display:"flex",gap:14,marginBottom:32,fontSize:26}}>{DEPTS.map(d=><span key={d.id} style={{opacity:0.75}}>{d.icon}</span>)}</div><p style={{fontSize:13,maxWidth:300,lineHeight:1.65,marginBottom:32,color:t.muted}}>Plan. Build. Grow Philadelphia.<br/>Can you build a city that's equitable, resilient, and accessible to everyone?</p><Btn onClick={startGame} style={{fontSize:17,padding:"16px 52px"}}>NEW GAME</Btn><p style={{fontSize:10,marginTop:28,color:t.faint,lineHeight:1.6}}>Built with real climate-justice tools by Nico Meyering, MPA<br/>Rated E for Everyone Builds</p></div></div>);
+  if(phase==="title")return(
+    <div style={shell}><div key="title" className="phase" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:"100vh",padding:32,textAlign:"center",background:t.gradBg,position:"relative"}}>
+      <div style={{position:"absolute",top:16,right:16}}><button onClick={()=>setHc(!hc)} style={{...hcBtnStyle,color:hc?"#444":"#99a"}} aria-label="Toggle high contrast">{hc?"◑ Standard":"◐ High Contrast"}</button></div>
+      <div style={{display:"inline-flex",alignItems:"baseline",gap:6,marginBottom:6}}>
+        <span style={{background:"linear-gradient(135deg,#D4A017,#f4d03f)",padding:"3px 16px",fontSize:28,fontWeight:900,color:"#1a1a2e",letterSpacing:1,borderRadius:3}}>SIM</span>
+        <span style={{fontSize:44,fontWeight:900,color:hc?"#111":"#fff",letterSpacing:4}}>PHILLY</span>
+        <span style={{fontSize:24,fontWeight:700,color:"#D4A017"}}>2000</span>
+      </div>
+      <p style={{fontSize:11,letterSpacing:5,marginBottom:40,color:t.accent,fontWeight:600}}>THE CLIMATE EQUITY CITY BUILDER</p>
+      <div style={{display:"flex",gap:16,marginBottom:36,fontSize:28}}>{DEPTS.map(d=><span key={d.id} style={{opacity:0.7,transition:"opacity 0.2s"}}>{d.icon}</span>)}</div>
+      <p style={{fontSize:14,maxWidth:300,lineHeight:1.7,marginBottom:36,color:t.muted}}>Plan. Build. Grow Philadelphia.<br/>Can you build a city that's equitable, resilient, and accessible to everyone?</p>
+      <Btn onClick={startGame} style={{fontSize:17,padding:"16px 56px",borderRadius:12}}>NEW GAME</Btn>
+      <p style={{fontSize:10,marginTop:32,color:t.faint,lineHeight:1.7}}>Built with real climate-justice tools by Nico Meyering, MPA<br/>Rated E for Everyone Builds</p>
+    </div></div>
+  );
 
   /* INTRO */
-  if(phase==="intro")return(<div style={shell}><div style={bar}><Logo hc={hc}/><button onClick={()=>setHc(!hc)} style={hcBtn} aria-label="Toggle high contrast">{hc?"◑":"◐"}</button></div><div style={{padding:22}}><h2 style={{fontSize:21,fontWeight:700,margin:"0 0 14px",color:t.accent}}>Welcome, Mayor.</h2><p style={{fontSize:14,lineHeight:1.7,marginBottom:14,color:t.muted}}>Philadelphia faces rising heat, aging infrastructure, transit cuts, and deep environmental injustice — and the communities hit hardest have been disinvested the longest.</p><p style={{fontSize:14,lineHeight:1.7,marginBottom:14,color:t.muted}}>You have <strong style={{color:t.accent}}>4 years</strong> and <strong style={{color:t.accent}}>12 investment points per year</strong> across <strong style={{color:t.accent}}>6 departments</strong>. Each year, the city faces a crisis — your investments determine who's protected and who's not.</p><div style={{background:t.accentBg,border:"1px solid "+(hc?"#cca":"rgba(212,160,23,0.2)"),borderRadius:8,padding:14,marginBottom:14}}><p style={{fontSize:13,fontWeight:700,color:t.accent,margin:"0 0 4px",fontStyle:"italic"}}>"Every budget is a moral document."</p><p style={{fontSize:12,color:t.muted,margin:0}}>Your choices reveal your values. Govern accordingly.</p></div><div style={{background:hc?"rgba(123,78,163,0.08)":"rgba(123,78,163,0.12)",border:"1px solid "+(hc?"#a8a":"rgba(123,78,163,0.25)"),borderRadius:8,padding:14,marginBottom:14}}><p style={{fontSize:12,fontWeight:700,color:"#9b6ec4",margin:"0 0 4px"}}>📋 Civic Trust Mechanic</p><p style={{fontSize:12,color:t.muted,margin:0,lineHeight:1.5}}>Invest 2+ points in Policy & Plain Language and all other departments get a <strong style={{color:t.text}}>15% effectiveness boost</strong>. Transparent governance multiplies everything.</p></div><div style={{background:t.accentBg,border:"1px solid "+(hc?"#cca":"rgba(212,160,23,0.2)"),borderRadius:8,padding:14,marginBottom:22}}><p style={{fontSize:12,color:t.accent,margin:0,fontWeight:700}}>Starting Conditions</p><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"4px 16px",marginTop:8}}>{SCORE_META.map(s=><span key={s.key} style={{fontSize:12,color:t.muted}}>{s.icon} {s.label}: <strong style={{color:t.text}}>{INIT_SCORES[s.key]}</strong></span>)}</div></div><Btn onClick={()=>setPhase("allocate")} style={{width:"100%"}}>BEGIN YEAR 1 →</Btn></div></div>);
+  if(phase==="intro")return(
+    <div style={shell}><div style={topBar}><Logo hc={hc}/><button onClick={()=>setHc(!hc)} style={hcBtnStyle} aria-label="Toggle high contrast">{hc?"◑":"◐"}</button></div>
+    <div key="intro" className="phase" style={section}>
+      <h2 style={{fontSize:22,fontWeight:800,margin:"0 0 16px",color:t.accent}}>Welcome, Mayor.</h2>
+      <p style={{fontSize:14,lineHeight:1.75,marginBottom:16,color:t.muted}}>Philadelphia faces rising heat, aging infrastructure, transit cuts, and deep environmental injustice — and the communities hit hardest have been disinvested the longest.</p>
+      <p style={{fontSize:14,lineHeight:1.75,marginBottom:18,color:t.muted}}>You have <strong style={{color:t.accent}}>4 years</strong> and <strong style={{color:t.accent}}>12 investment points per year</strong> across <strong style={{color:t.accent}}>6 departments</strong>. Each year, the city faces a crisis — your investments determine who's protected and who's not.</p>
+      <div style={{background:t.accentBg,border:"1px solid "+(hc?"#ddb":"rgba(212,160,23,0.18)"),borderRadius:10,padding:16,marginBottom:14}}>
+        <p style={{fontSize:14,fontWeight:700,color:t.accent,margin:"0 0 4px",fontStyle:"italic"}}>"Every budget is a moral document."</p>
+        <p style={{fontSize:12,color:t.muted,margin:0}}>Your choices reveal your values. Govern accordingly.</p>
+      </div>
+      <div style={{background:hc?"rgba(123,78,163,0.06)":"rgba(123,78,163,0.1)",border:"1px solid "+(hc?"#b8b":"rgba(123,78,163,0.2)"),borderRadius:10,padding:16,marginBottom:14}}>
+        <p style={{fontSize:12,fontWeight:700,color:"#9b6ec4",margin:"0 0 4px"}}>📋 Civic Trust Mechanic</p>
+        <p style={{fontSize:12,color:t.muted,margin:0,lineHeight:1.5}}>Invest 2+ points in Policy & Plain Language and all other departments get a <strong style={{color:t.text}}>15% effectiveness boost</strong>. Transparent governance multiplies everything.</p>
+      </div>
+      <div style={{background:t.accentBg,border:"1px solid "+(hc?"#ddb":"rgba(212,160,23,0.18)"),borderRadius:10,padding:16,marginBottom:24}}>
+        <p style={{fontSize:12,color:t.accent,margin:0,fontWeight:700}}>Starting Conditions</p>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 16px",marginTop:10}}>{SCORE_META.map(s=><span key={s.key} style={{fontSize:12,color:t.muted}}>{s.icon} {s.label}: <strong style={{color:t.text}}>{INIT_SCORES[s.key]}</strong></span>)}</div>
+      </div>
+      <Btn onClick={()=>setPhase("allocate")} style={{width:"100%"}}>BEGIN YEAR 1 →</Btn>
+    </div></div>
+  );
 
   /* ALLOCATE */
-  if(phase==="allocate")return(<div style={shell}><div style={bar}><Logo hc={hc}/><div style={{display:"flex",alignItems:"center",gap:8}}><button onClick={()=>setHc(!hc)} style={hcBtn} aria-label="Toggle high contrast">{hc?"◑":"◐"}</button><span style={{fontWeight:700,fontSize:12,color:"#1a1a2e",opacity:0.7}}>YEAR {round}/{ROUNDS}</span></div></div><div style={{padding:"14px 18px"}}><div style={{marginBottom:10}}>{SCORE_META.map(s=><ScoreBar key={s.key} label={s.label} value={scores[s.key]} color={s.color} icon={s.icon} hc={hc}/>)}</div>{alloc.policy>=2&&<div style={{background:hc?"rgba(123,78,163,0.1)":"rgba(123,78,163,0.15)",border:"1px solid "+(hc?"#a8a":"rgba(123,78,163,0.3)"),borderRadius:8,padding:"6px 12px",marginBottom:8,textAlign:"center"}}><span style={{fontSize:12,fontWeight:700,color:"#9b6ec4"}}>📋 Civic Trust Bonus Active — all departments +15%</span></div>}<div style={{background:remaining===0?"rgba(39,174,96,0.12)":t.accentBg,border:"1px solid "+(remaining===0?(hc?"#2a9d4a":"rgba(39,174,96,0.35)"):(hc?"#cca":"rgba(212,160,23,0.35)")),borderRadius:8,padding:"8px 14px",marginBottom:12,textAlign:"center"}}><span style={{fontSize:13,fontWeight:700,color:remaining===0?"#16a34a":t.accent}}>{remaining===0?"✓ Budget fully allocated":remaining+" point"+(remaining!==1?"s":"")+" remaining"}</span></div>{DEPTS.map(d=>(<div key={d.id} style={{background:alloc[d.id]>0?(d.bg+(hc?"22":"12")):t.cardBg,borderRadius:8,padding:"10px 14px",marginBottom:6,border:alloc[d.id]>0?("1px solid "+d.bg+(hc?"55":"40")):("1px solid "+t.cardBorder)}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}><div style={{flex:1,minWidth:0}}><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:2}}><span style={{fontSize:15}}>{d.icon}</span><span style={{fontSize:13,fontWeight:700,color:t.text}}>{d.name}</span></div><p style={{fontSize:11,color:t.muted,margin:0,lineHeight:1.3}}>{d.desc}</p></div><div style={{display:"flex",alignItems:"center",gap:10,marginLeft:12}}><button onClick={()=>adjustAlloc(d.id,-1)} disabled={alloc[d.id]<=0} aria-label={"Decrease "+d.name} style={{width:32,height:32,borderRadius:"50%",border:"2px solid "+d.bg,background:"transparent",color:d.bg,fontSize:18,fontWeight:700,cursor:alloc[d.id]<=0?"not-allowed":"pointer",opacity:alloc[d.id]<=0?0.25:1,lineHeight:1}}>−</button><span style={{fontSize:24,fontWeight:900,minWidth:28,textAlign:"center",color:alloc[d.id]>0?d.bg:t.faint}}>{alloc[d.id]}</span><button onClick={()=>adjustAlloc(d.id,1)} disabled={remaining<=0} aria-label={"Increase "+d.name} style={{width:32,height:32,borderRadius:"50%",border:"2px solid "+d.bg,background:remaining<=0?"transparent":d.bg,color:remaining<=0?d.bg:"#fff",fontSize:18,fontWeight:700,cursor:remaining<=0?"not-allowed":"pointer",opacity:remaining<=0?0.25:1,lineHeight:1}}>+</button></div></div></div>))}<Btn onClick={confirmAllocation} disabled={spent===0} style={{width:"100%",marginTop:6}}>{spent===0?"Allocate at least 1 point":"Confirm Year "+round+" Budget →"}</Btn></div></div>);
+  if(phase==="allocate")return(
+    <div style={shell}><div style={topBar}><Logo hc={hc}/><div style={{display:"flex",alignItems:"center",gap:8}}><button onClick={()=>setHc(!hc)} style={hcBtnStyle} aria-label="Toggle high contrast">{hc?"◑":"◐"}</button><span style={{fontWeight:700,fontSize:12,color:"#1a1a2e",opacity:0.7}}>YEAR {round}</span></div></div>
+    <Progress round={round} total={ROUNDS} hc={hc}/>
+    <div key={"alloc"+round} className="phase" style={section}>
+      <div style={{marginBottom:12}}>{SCORE_META.map(s=><ScoreBar key={s.key} label={s.label} value={scores[s.key]} color={s.color} icon={s.icon} hc={hc}/>)}</div>
+      {alloc.policy>=2&&<div style={{background:hc?"rgba(123,78,163,0.08)":"rgba(123,78,163,0.12)",border:"1px solid "+(hc?"#b8b":"rgba(123,78,163,0.25)"),borderRadius:8,padding:"8px 14px",marginBottom:10,textAlign:"center"}}><span style={{fontSize:12,fontWeight:700,color:"#9b6ec4"}}>📋 Civic Trust Bonus Active — all departments +15%</span></div>}
+      <div style={{background:remaining===0?"rgba(39,174,96,0.1)":t.accentBg,border:"1px solid "+(remaining===0?(hc?"#2a9d4a":"rgba(39,174,96,0.3)"):(hc?"#ddb":"rgba(212,160,23,0.3)")),borderRadius:8,padding:"9px 14px",marginBottom:14,textAlign:"center"}}><span style={{fontSize:13,fontWeight:700,color:remaining===0?"#16a34a":t.accent}}>{remaining===0?"✓ Budget fully allocated":remaining+" point"+(remaining!==1?"s":"")+" remaining"}</span></div>
+      {DEPTS.map(d=>(
+        <div key={d.id} className="dept-card" style={card(alloc[d.id]>0,d.bg)}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:3}}><span style={{fontSize:16}}>{d.icon}</span><span style={{fontSize:14,fontWeight:700,color:t.text}}>{d.name}</span></div>
+              <p style={{fontSize:11,color:t.muted,margin:0,lineHeight:1.4}}>{d.desc}</p>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:10,marginLeft:14}}>
+              <button className="alloc-btn" onClick={()=>adjustAlloc(d.id,-1)} disabled={alloc[d.id]<=0} aria-label={"Decrease "+d.name} style={{border:"2px solid "+d.bg,background:"transparent",color:d.bg}}>−</button>
+              <span style={{fontSize:26,fontWeight:900,minWidth:30,textAlign:"center",color:alloc[d.id]>0?d.bg:t.faint,transition:"color 0.2s"}}>{alloc[d.id]}</span>
+              <button className="alloc-btn" onClick={()=>adjustAlloc(d.id,1)} disabled={remaining<=0} aria-label={"Increase "+d.name} style={{border:"2px solid "+d.bg,background:remaining<=0?"transparent":d.bg,color:remaining<=0?d.bg:"#fff"}}>+</button>
+            </div>
+          </div>
+        </div>
+      ))}
+      <Btn onClick={confirmAllocation} disabled={spent===0} style={{width:"100%",marginTop:8}}>{spent===0?"Allocate at least 1 point":"Confirm Year "+round+" Budget →"}</Btn>
+    </div></div>
+  );
 
   /* EVENT */
-  if(phase==="event"&&curEvent&&eventResult){const isGood=!!curEvent.bonus;const voices=VOICES[curEvent.id]||[];return(<div style={shell}><div style={bar}><Logo hc={hc}/><div style={{display:"flex",alignItems:"center",gap:8}}><button onClick={()=>setHc(!hc)} style={hcBtn} aria-label="Toggle high contrast">{hc?"◑":"◐"}</button><span style={{fontWeight:700,fontSize:12,color:"#1a1a2e",opacity:0.7}}>YEAR {round}</span></div></div><div style={{padding:22}}><div style={{textAlign:"center",marginBottom:14}}><span style={{fontSize:48}}>{curEvent.icon}</span></div><h2 style={{fontSize:18,fontWeight:800,textAlign:"center",margin:"0 0 8px",color:isGood?(hc?"#16a34a":"#4ade80"):(hc?"#dc2626":"#f87171")}}>{curEvent.title}</h2><p style={{fontSize:13,lineHeight:1.6,textAlign:"center",color:t.muted,marginBottom:16}}>{curEvent.desc}</p><div style={{background:eventResult.mitigated?(hc?"rgba(22,163,74,0.1)":"rgba(74,222,128,0.08)"):(hc?"rgba(220,38,38,0.1)":"rgba(248,113,113,0.08)"),border:"1px solid "+(eventResult.mitigated?(hc?"#2a9":"rgba(74,222,128,0.25)"):(hc?"#d44":"rgba(248,113,113,0.25)")),borderRadius:10,padding:14,marginBottom:14,textAlign:"center"}}><p style={{fontSize:13,fontWeight:700,margin:"0 0 4px",color:eventResult.mitigated?(hc?"#16a34a":"#4ade80"):(hc?"#dc2626":"#f87171")}}>{eventResult.mitigated?"✓ Your investments paid off":"✗ The city was unprepared"}</p><p style={{fontSize:12,color:t.muted,margin:0,lineHeight:1.5}}>{eventResult.msg}</p>{trustBonus&&<p style={{fontSize:11,color:"#9b6ec4",margin:"6px 0 0",fontWeight:600}}>📋 Civic Trust Bonus was active this year</p>}</div>{mitigatedDept&&<a href={mitigatedDept.url} target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",gap:10,background:mitigatedDept.bg+(hc?"18":"12"),borderRadius:8,padding:"10px 14px",marginBottom:14,textDecoration:"none",border:"1px solid "+mitigatedDept.bg+(hc?"44":"30")}}><span style={{fontSize:20}}>{mitigatedDept.icon}</span><div style={{flex:1}}><span style={{fontSize:12,fontWeight:700,color:mitigatedDept.bg}}>Explore: {mitigatedDept.tool} ↗</span><p style={{fontSize:11,color:t.muted,margin:"2px 0 0",lineHeight:1.3}}>{curEvent.toolNote}</p></div></a>}<div style={{background:hc?"#f5f0e5":"rgba(212,160,23,0.06)",border:"1px solid "+(hc?"#d4c090":"rgba(212,160,23,0.15)"),borderRadius:8,padding:"10px 12px",marginBottom:14}}><p style={{fontSize:11,fontWeight:700,color:t.accent,margin:"0 0 3px"}}>GOVERNANCE INSIGHT</p><p style={{fontSize:11,color:t.muted,margin:0,lineHeight:1.5,fontStyle:"italic"}}>{curEvent.govInsight}</p></div>{voices.length>0&&<div style={{marginBottom:14}}><p style={{fontSize:11,fontWeight:700,color:t.faint,marginBottom:6,letterSpacing:0.5}}>COMMUNITY VOICES</p>{voices.map((v,i)=><VoiceCard key={i} residentKey={v.r} text={eventResult.mitigated?v.y:v.n} hc={hc}/>)}</div>}<div style={{marginBottom:16}}><p style={{fontSize:11,fontWeight:700,color:t.faint,marginBottom:6,letterSpacing:0.5}}>SCORE UPDATE</p>{SCORE_META.map(s=>{const d=eventResult.after[s.key]-(prevScores||scores)[s.key];return <ScoreBar key={s.key} label={s.label} value={eventResult.after[s.key]} color={s.color} icon={s.icon} delta={d} hc={hc}/>;})}</div><Btn onClick={resolveEvent} style={{width:"100%"}}>{round>=ROUNDS?"See Governance Report →":"Begin Year "+(round+1)+" →"}</Btn></div></div>);}
+  if(phase==="event"&&curEvent&&eventResult){
+    const isGood=!!curEvent.bonus;const voices=VOICES[curEvent.id]||[];
+    return(<div style={shell}><div style={topBar}><Logo hc={hc}/><div style={{display:"flex",alignItems:"center",gap:8}}><button onClick={()=>setHc(!hc)} style={hcBtnStyle} aria-label="Toggle high contrast">{hc?"◑":"◐"}</button><span style={{fontWeight:700,fontSize:12,color:"#1a1a2e",opacity:0.7}}>YEAR {round}</span></div></div>
+    <Progress round={round} total={ROUNDS} hc={hc}/>
+    <div key={"event"+round} className="phase" style={{padding:"20px 20px 24px"}}>
+      <div style={{textAlign:"center",marginBottom:16}}><span style={{fontSize:52}}>{curEvent.icon}</span></div>
+      <h2 style={{fontSize:19,fontWeight:800,textAlign:"center",margin:"0 0 10px",color:isGood?(hc?"#16a34a":"#4ade80"):(hc?"#dc2626":"#f87171")}}>{curEvent.title}</h2>
+      <p style={{fontSize:13,lineHeight:1.65,textAlign:"center",color:t.muted,marginBottom:18}}>{curEvent.desc}</p>
+      <div style={{background:eventResult.mitigated?(hc?"rgba(22,163,74,0.08)":"rgba(74,222,128,0.07)"):(hc?"rgba(220,38,38,0.08)":"rgba(248,113,113,0.07)"),border:"1px solid "+(eventResult.mitigated?(hc?"#4a9":"rgba(74,222,128,0.2)"):(hc?"#d66":"rgba(248,113,113,0.2)")),borderRadius:12,padding:16,marginBottom:16,textAlign:"center"}}>
+        <p style={{fontSize:14,fontWeight:700,margin:"0 0 6px",color:eventResult.mitigated?(hc?"#16a34a":"#4ade80"):(hc?"#dc2626":"#f87171")}}>{eventResult.mitigated?"✓ Your investments paid off":"✗ The city was unprepared"}</p>
+        <p style={{fontSize:13,color:t.muted,margin:0,lineHeight:1.55}}>{eventResult.msg}</p>
+        {trustBonus&&<p style={{fontSize:11,color:"#9b6ec4",margin:"8px 0 0",fontWeight:600}}>📋 Civic Trust Bonus was active this year</p>}
+      </div>
+      {mitigatedDept&&<a href={mitigatedDept.url} target="_blank" rel="noopener noreferrer" className="tool-link" style={{background:mitigatedDept.bg+(hc?"15":"0d"),border:"1px solid "+mitigatedDept.bg+(hc?"40":"28"),marginBottom:16}}><span style={{fontSize:22}}>{mitigatedDept.icon}</span><div style={{flex:1}}><span style={{fontSize:12,fontWeight:700,color:mitigatedDept.bg}}>Explore: {mitigatedDept.tool} ↗</span><p style={{fontSize:11,color:t.muted,margin:"3px 0 0",lineHeight:1.35}}>{curEvent.toolNote}</p></div></a>}
+      <div style={{background:hc?"#faf5ea":"rgba(212,160,23,0.05)",border:"1px solid "+(hc?"#e0d0a0":"rgba(212,160,23,0.12)"),borderRadius:10,padding:"12px 14px",marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.accent,margin:"0 0 4px",letterSpacing:0.3}}>GOVERNANCE INSIGHT</p>
+        <p style={{fontSize:11.5,color:t.muted,margin:0,lineHeight:1.55,fontStyle:"italic"}}>{curEvent.govInsight}</p>
+      </div>
+      {voices.length>0&&<div style={{marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.faint,marginBottom:8,letterSpacing:0.5}}>COMMUNITY VOICES</p>
+        {voices.map((v,i)=><VoiceCard key={i} residentKey={v.r} text={eventResult.mitigated?v.y:v.n} hc={hc}/>)}
+      </div>}
+      <div style={{marginBottom:18}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.faint,marginBottom:8,letterSpacing:0.5}}>SCORE UPDATE</p>
+        {SCORE_META.map(s=>{const d=eventResult.after[s.key]-(prevScores||scores)[s.key];return <ScoreBar key={s.key} label={s.label} value={eventResult.after[s.key]} color={s.color} icon={s.icon} delta={d} hc={hc}/>;})}
+      </div>
+      <Btn onClick={resolveEvent} style={{width:"100%"}}>{round>=ROUNDS?"See Governance Report →":"Begin Year "+(round+1)+" →"}</Btn>
+    </div></div>);
+  }
 
   /* GAME OVER */
-  if(phase==="gameOver"){const strongest=[...SCORE_META].sort((a,b)=>scores[b.key]-scores[a.key])[0];const weakest=[...SCORE_META].sort((a,b)=>scores[a.key]-scores[b.key])[0];const topDept=[...DEPTS].sort((a,b)=>(totals[b.id]||0)-(totals[a.id]||0))[0];return(<div style={shell}><div style={bar}><Logo hc={hc}/><button onClick={()=>setHc(!hc)} style={hcBtn} aria-label="Toggle high contrast">{hc?"◑":"◐"}</button></div><div style={{background:hc?t.bg:t.gradBg,padding:22,minHeight:"90vh"}}>
-    <div style={{textAlign:"center",marginBottom:18}}><p style={{fontSize:11,color:t.accent,letterSpacing:2,fontWeight:600,marginBottom:10}}>GOVERNANCE REPORT</p><div style={{width:84,height:84,borderRadius:"50%",margin:"0 auto 10px",display:"flex",alignItems:"center",justifyContent:"center",background:grade.grade<="B"?"linear-gradient(135deg,#D4A017,#f4d03f)":grade.grade==="C"?"linear-gradient(135deg,#f39c12,#fbbf24)":"linear-gradient(135deg,#c0392b,#f87171)",fontSize:42,fontWeight:900,color:"#1a1a2e"}}>{grade.grade}</div><h2 style={{fontSize:21,fontWeight:800,margin:"0 0 4px",color:t.text}}>{grade.title}</h2><p style={{fontSize:13,color:t.muted,margin:"0 0 4px",lineHeight:1.5,maxWidth:340,marginLeft:"auto",marginRight:"auto"}}>{grade.msg}</p><p style={{fontSize:12,color:t.faint,margin:0}}>Average: {avg}/100 · Crises mitigated: {mitigatedCount}/{ROUNDS}</p></div>
-    <div style={{background:t.accentBg,border:"1px solid "+(hc?"#cca":"rgba(212,160,23,0.2)"),borderRadius:10,padding:14,marginBottom:14}}><p style={{fontSize:12,fontWeight:700,color:t.accent,margin:"0 0 4px"}}>Your Governance Style</p><p style={{fontSize:15,fontWeight:800,color:t.text,margin:"0 0 4px"}}>{gStyle.title}</p><p style={{fontSize:12,color:t.muted,margin:0,lineHeight:1.5}}>{gStyle.desc}</p><p style={{fontSize:11,color:t.faint,margin:"8px 0 0"}}>Top: {topDept.icon} {topDept.name} · Strongest: {strongest.icon} {strongest.label} · Needs work: {weakest.icon} {weakest.label}</p></div>
-    <div style={{background:hc?"rgba(100,100,200,0.06)":"rgba(100,100,255,0.06)",border:"1px solid "+(hc?"#99a":"rgba(100,100,255,0.15)"),borderRadius:10,padding:14,marginBottom:14}}><p style={{fontSize:12,fontWeight:700,color:"#818cf8",margin:"0 0 4px"}}>♿ Disability Equity Assessment</p><p style={{fontSize:14,fontWeight:800,color:disAssess.color,margin:"0 0 6px"}}>{disAssess.title}</p><p style={{fontSize:12,color:t.muted,margin:"0 0 8px",lineHeight:1.5}}>More than 250,000 Philadelphians have a disability. Your investments in accessible refuge, transit, green space, and inclusive policy determined whether they were protected or left behind.</p><div style={{background:hc?"#f0f0f0":"rgba(255,255,255,0.04)",border:hc?"1px solid #bbb":"1px solid rgba(255,255,255,0.06)",borderRadius:8,padding:"10px 12px"}}><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}><span style={{fontSize:16}}>♿</span><span style={{fontSize:12,fontWeight:700,color:hc?"#111":"#d0c8b8"}}>Maya Chen</span><span style={{fontSize:11,color:hc?"#555":"#667",marginLeft:4}}>34 · West Philadelphia</span></div><p style={{fontSize:12,color:hc?"#333":"#a0a098",margin:0,lineHeight:1.5,fontStyle:"italic"}}>"{disAssess.quote}"</p></div></div>
-    <div style={{marginBottom:14}}>{SCORE_META.map(s=><ScoreBar key={s.key} label={s.label} value={scores[s.key]} color={s.color} icon={s.icon} hc={hc}/>)}</div>
-    <div style={{background:t.cardBg,border:"1px solid "+t.cardBorder,borderRadius:10,padding:"12px 8px 4px",marginBottom:14}}><p style={{fontSize:11,fontWeight:700,color:t.faint,margin:"0 0 8px 8px",letterSpacing:0.5}}>SCORE EVOLUTION</p><ScoreChart data={scoreHist} t={t}/></div>
-    <div style={{marginBottom:14}}><p style={{fontSize:12,fontWeight:700,color:t.accent,marginBottom:8,letterSpacing:0.5}}>EXPLORE THE REAL TOOLS</p><p style={{fontSize:11,color:t.muted,marginBottom:8,lineHeight:1.5}}>Every department is powered by a real climate-justice civic tech tool built for Philadelphia.</p>{DEPTS.map(d=><a key={d.id} href={d.url} target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",gap:10,background:t.cardBg,borderRadius:7,padding:"9px 12px",marginBottom:4,textDecoration:"none",border:"1px solid "+t.cardBorder}}><span style={{fontSize:16}}>{d.icon}</span><span style={{fontSize:12,fontWeight:700,color:d.bg}}>{d.tool}</span><span style={{fontSize:11,color:t.faint,marginLeft:"auto"}}>↗</span></a>)}{EXTRA_TOOLS.map(x=><a key={x.name} href={x.url} target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",gap:10,background:t.cardBg,borderRadius:7,padding:"9px 12px",marginBottom:4,textDecoration:"none",border:"1px solid "+t.cardBorder}}><span style={{fontSize:16}}>🔧</span><span style={{fontSize:12,fontWeight:600,color:t.muted}}>{x.name}</span><span style={{fontSize:10,color:t.faint,marginLeft:4}}>— {x.desc}</span><span style={{fontSize:11,color:t.faint,marginLeft:"auto"}}>↗</span></a>)}</div>
-    <div style={{background:t.cardBg,border:"1px solid "+t.cardBorder,borderRadius:8,padding:"10px 12px",marginBottom:14}}><p style={{fontSize:11,fontWeight:700,color:t.faint,margin:"0 0 6px"}}>DATA SOURCES</p><p style={{fontSize:10,color:t.muted,margin:0,lineHeight:1.6}}>Pew Charitable Trusts, "Philadelphia 2026: State of the City," April 2026 · Brookings Institution, "SE Pennsylvania Market Assessment," July 2025 · Pew, "Gen Z Likes Philadelphia," August 2026 · Pew, "Philadelphia's Guiding Document at 75," March 2026 · Opportunity Insights, economic mobility data</p></div>
-    <Btn onClick={shareResults} style={{width:"100%",marginBottom:8,background:copied?"#16a34a":"#D4A017"}}>{copied?"✓ Copied to clipboard!":"📋 Share Your Results on LinkedIn"}</Btn>
-    <div style={{background:t.accentBg,border:"1px solid "+(hc?"#cca":"rgba(212,160,23,0.15)"),borderRadius:10,padding:14,marginBottom:14,textAlign:"center"}}><p style={{fontSize:12,color:t.muted,margin:0,lineHeight:1.65}}>Built by <strong style={{color:t.accent}}>Nico Meyering, MPA</strong><br/><span style={{fontSize:11,color:t.faint}}>Chairman, Mayor's Commission on People with Disabilities<br/>VP, Net Impact Philadelphia · Board, Disability Pride PA<br/>Steering Committee, Transit Forward Philadelphia</span></p></div>
-    <Btn onClick={startGame} style={{width:"100%"}}>PLAY AGAIN</Btn>
-  </div></div>);}
+  if(phase==="gameOver"){
+    const strongest=[...SCORE_META].sort((a,b)=>scores[b.key]-scores[a.key])[0];
+    const weakest=[...SCORE_META].sort((a,b)=>scores[a.key]-scores[b.key])[0];
+    const topDept=[...DEPTS].sort((a,b)=>(totals[b.id]||0)-(totals[a.id]||0))[0];
+    return(<div style={shell}><div style={topBar}><Logo hc={hc}/><button onClick={()=>setHc(!hc)} style={hcBtnStyle} aria-label="Toggle high contrast">{hc?"◑":"◐"}</button></div>
+    <div key="gameover" className="phase" style={{background:hc?t.bg:t.gradBg,padding:"24px 20px",minHeight:"90vh"}}>
+      <div style={{textAlign:"center",marginBottom:22}}>
+        <p style={{fontSize:11,color:t.accent,letterSpacing:3,fontWeight:600,marginBottom:14}}>GOVERNANCE REPORT</p>
+        <div className="grade-circle" style={{width:90,height:90,borderRadius:"50%",margin:"0 auto 12px",display:"flex",alignItems:"center",justifyContent:"center",background:grade.grade<="B"?"linear-gradient(135deg,#D4A017,#f4d03f)":grade.grade==="C"?"linear-gradient(135deg,#f39c12,#fbbf24)":"linear-gradient(135deg,#c0392b,#f87171)",fontSize:44,fontWeight:900,color:"#1a1a2e",boxShadow:"0 4px 20px rgba(212,160,23,0.3)"}}>{grade.grade}</div>
+        <h2 style={{fontSize:22,fontWeight:800,margin:"0 0 6px",color:t.text}}>{grade.title}</h2>
+        <p style={{fontSize:13,color:t.muted,margin:"0 0 4px",lineHeight:1.55,maxWidth:340,marginLeft:"auto",marginRight:"auto"}}>{grade.msg}</p>
+        <p style={{fontSize:12,color:t.faint,margin:0}}>Average: {avg}/100 · Crises mitigated: {mitigatedCount}/{ROUNDS}</p>
+      </div>
+      <div style={{background:t.accentBg,border:"1px solid "+(hc?"#ddb":"rgba(212,160,23,0.18)"),borderRadius:12,padding:16,marginBottom:16}}>
+        <p style={{fontSize:12,fontWeight:700,color:t.accent,margin:"0 0 4px"}}>Your Governance Style</p>
+        <p style={{fontSize:16,fontWeight:800,color:t.text,margin:"0 0 6px"}}>{gStyle.title}</p>
+        <p style={{fontSize:12.5,color:t.muted,margin:0,lineHeight:1.55}}>{gStyle.desc}</p>
+        <p style={{fontSize:11,color:t.faint,margin:"10px 0 0"}}>Top: {topDept.icon} {topDept.name} · Strongest: {strongest.icon} {strongest.label} · Needs work: {weakest.icon} {weakest.label}</p>
+      </div>
+      <div style={{background:hc?"rgba(100,100,200,0.05)":"rgba(100,100,255,0.05)",border:"1px solid "+(hc?"#aab":"rgba(100,100,255,0.12)"),borderRadius:12,padding:16,marginBottom:16}}>
+        <p style={{fontSize:12,fontWeight:700,color:"#818cf8",margin:"0 0 4px"}}>♿ Disability Equity Assessment</p>
+        <p style={{fontSize:15,fontWeight:800,color:disAssess.color,margin:"0 0 8px"}}>{disAssess.title}</p>
+        <p style={{fontSize:12.5,color:t.muted,margin:"0 0 10px",lineHeight:1.55}}>More than 250,000 Philadelphians have a disability. Your investments in accessible refuge, transit, green space, and inclusive policy determined whether they were protected or left behind.</p>
+        <div className="voice-card" style={{background:hc?"#f0f0f0":"rgba(255,255,255,0.04)",border:hc?"1px solid #bbb":"1px solid rgba(255,255,255,0.06)"}}>
+          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:5}}><span style={{fontSize:18}}>♿</span><span style={{fontSize:12,fontWeight:700,color:hc?"#111":"#d0c8b8"}}>Maya Chen</span><span style={{fontSize:11,color:hc?"#555":"#778",marginLeft:4}}>34 · West Philadelphia</span></div>
+          <p style={{fontSize:12.5,color:hc?"#333":"#a8a098",margin:0,lineHeight:1.55,fontStyle:"italic"}}>"{disAssess.quote}"</p>
+        </div>
+      </div>
+      <div style={{marginBottom:16}}>{SCORE_META.map(s=><ScoreBar key={s.key} label={s.label} value={scores[s.key]} color={s.color} icon={s.icon} hc={hc}/>)}</div>
+      <div style={{background:t.cardBg,border:"1px solid "+t.cardBorder,borderRadius:12,padding:"14px 10px 6px",marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.faint,margin:"0 0 8px 6px",letterSpacing:0.5}}>SCORE EVOLUTION</p>
+        <ScoreChart data={scoreHist} t={t}/>
+      </div>
+      <div style={{marginBottom:16}}>
+        <p style={{fontSize:12,fontWeight:700,color:t.accent,marginBottom:10,letterSpacing:0.5}}>EXPLORE THE REAL TOOLS</p>
+        <p style={{fontSize:11.5,color:t.muted,marginBottom:10,lineHeight:1.55}}>Every department is powered by a real climate-justice civic tech tool built for Philadelphia.</p>
+        {DEPTS.map(d=><a key={d.id} href={d.url} target="_blank" rel="noopener noreferrer" className="tool-link" style={{background:t.cardBg,border:"1px solid "+t.cardBorder}}><span style={{fontSize:18}}>{d.icon}</span><span style={{fontSize:12.5,fontWeight:700,color:d.bg}}>{d.tool}</span><span style={{fontSize:11,color:t.faint,marginLeft:"auto"}}>↗</span></a>)}
+        {EXTRA_TOOLS.map(x=><a key={x.name} href={x.url} target="_blank" rel="noopener noreferrer" className="tool-link" style={{background:t.cardBg,border:"1px solid "+t.cardBorder}}><span style={{fontSize:18}}>🔧</span><span style={{fontSize:12,fontWeight:600,color:t.muted}}>{x.name}</span><span style={{fontSize:10,color:t.faint,marginLeft:4}}>— {x.desc}</span><span style={{fontSize:11,color:t.faint,marginLeft:"auto"}}>↗</span></a>)}
+      </div>
+      <div style={{background:t.cardBg,border:"1px solid "+t.cardBorder,borderRadius:10,padding:"12px 14px",marginBottom:16}}>
+        <p style={{fontSize:11,fontWeight:700,color:t.faint,margin:"0 0 6px"}}>DATA SOURCES</p>
+        <p style={{fontSize:10.5,color:t.muted,margin:0,lineHeight:1.65}}>Pew Charitable Trusts, "Philadelphia 2026: State of the City," April 2026 · Brookings Institution, "SE Pennsylvania Market Assessment," July 2025 · Pew, "Gen Z Likes Philadelphia," August 2026 · Pew, "Philadelphia's Guiding Document at 75," March 2026 · Opportunity Insights, economic mobility data</p>
+      </div>
+      <Btn onClick={shareResults} style={{width:"100%",marginBottom:10,background:copied?"#16a34a":"#D4A017"}}>{copied?"✓ Copied to clipboard!":"📋 Share Your Results on LinkedIn"}</Btn>
+      <div style={{background:t.accentBg,border:"1px solid "+(hc?"#ddb":"rgba(212,160,23,0.12)"),borderRadius:12,padding:16,marginBottom:16,textAlign:"center"}}>
+        <p style={{fontSize:12.5,color:t.muted,margin:0,lineHeight:1.7}}>Built by <strong style={{color:t.accent}}>Nico Meyering, MPA</strong><br/><span style={{fontSize:11,color:t.faint}}>Chairman, Mayor's Commission on People with Disabilities<br/>VP, Net Impact Philadelphia · Board, Disability Pride PA<br/>Steering Committee, Transit Forward Philadelphia</span></p>
+      </div>
+      <Btn onClick={startGame} style={{width:"100%"}}>PLAY AGAIN</Btn>
+    </div></div>);
+  }
   return null;
 }
 
