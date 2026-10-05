@@ -66,4 +66,4 @@ Chairman, Philadelphia Mayor's Commission on People with Disabilities
 VP, Net Impact Philadelphia · Board, Disability Pride PA
 Steering Committee, Transit Forward Philadelphia
 
-Part of the [Vibe Coding for Climate Justice](https://github.com/meyeringn) portfolio.
+Part of the [Vibe Coding for Climate Justice](https://github.com/meyeringn) portfolio.#
