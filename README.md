@@ -1,6 +1,6 @@
 # SimPhilly 2000
 
-A climate equity city builder for Philadelphia. You're the mayor — allocate budget, weather crises, and find out what kind of leader you are. Every department is powered by a real civic tech tool built for Philly.
+Come play a throwback city builder made for Philadelphia! You're the mayor: allocate budget, weather crises, and find out what kind of leader you are. Every department is powered by a real civic tech tool built for Philly.
 
 ## Why This Exists
 
